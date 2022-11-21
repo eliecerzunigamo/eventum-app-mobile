@@ -20,6 +20,9 @@ export const useApi = () => {
     const response: AxiosResponse<R> = await axios.post(BaseUrl + path, body, {
       params,
       withCredentials: true,
+      headers: {
+        "access-token": `${await AsyncStorage.getItem("token")}`,
+      },
     });
     return response;
   }
@@ -35,13 +38,13 @@ export const useApi = () => {
     return response;
   }
 
-  async function axiosDelete<R, P>(path: string, params?: P) {
-    const tokenJson = await AsyncStorage.getItem("token");
-    const token = JSON.parse(tokenJson ? tokenJson : "");
+  async function _delete<R, P>(path: string, params?: P) {
     const response: AxiosResponse<R> = await axios.delete(BaseUrl + path, {
       params,
       withCredentials: true,
-      headers: {},
+      headers: {
+        "access-token": `${await AsyncStorage.getItem("token")}`,
+      },
     });
     return response;
   }
@@ -50,6 +53,6 @@ export const useApi = () => {
     get,
     post,
     put,
-    axiosDelete,
+    _delete,
   };
 };

@@ -24,12 +24,16 @@ export const EventItem = ({ event }: Props) => {
         </Text>
         <View style={styles.timeContainer}>
           <View style={styles.hourContainer}>
-            <Text>{event.time}</Text>
-            <Icon name="clock-o" size={16} />
+            <Text style={{ color: "white", fontSize: 12, fontWeight: "bold" }}>
+              {event.time}
+            </Text>
+            <Icon name="clock-o" size={12} color="white" />
           </View>
           <View style={styles.dateContainer}>
-            <Text>{String(event.date)}</Text>
-            <Icon name="calendar" size={16} />
+            <Text style={{ color: "white", fontSize: 12, fontWeight: "bold" }}>
+              {String(event.date)}
+            </Text>
+            <Icon name="calendar" size={12} color="white" />
           </View>
         </View>
       </View>

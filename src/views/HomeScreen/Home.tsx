@@ -16,17 +16,26 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { FiltersModal } from "./components/FiltersModal";
 import { HomeStyles as styles } from "./utils/styles";
+import { useIsFocused } from '@react-navigation/native';
 
 const Home = () => {
-  const { loading, error, getEvents, events } = useHome();
+  const { loading, error, getEvents, events, setQuery, query } = useHome();
 
   const [openFiltersModal, setOpenFiltersModal] = useState(false);
   const [facultyId, setFacultyId] = useState("default");
   const [programId, setProgramId] = useState("default");
 
   useEffect(() => {
-    getEvents(7, facultyId, programId, true);
+    getEvents(7, facultyId, programId, true, query);
   }, [programId, facultyId]);
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      getEvents(7, facultyId, programId, true, query);
+    }
+  }, [isFocused]);
 
   const navigate = useNavigation<StackNavigationProp<any>>();
 
@@ -40,10 +49,16 @@ const Home = () => {
         selectedFaculty={facultyId}
         selectedProgram={programId}
       />
+
       <View style={styles.container}>
         <View style={styles.header}>
           <Icon name="search" size={17} color={"#3a3a3a"} />
-          <TextInput style={styles.title} placeholder={"Buscar"}></TextInput>
+          <TextInput
+            placeholderTextColor={"#9c9c9c"}
+            style={styles.title}
+            placeholder={"Buscar"}
+            onChangeText={(text) => setQuery(text)}
+          ></TextInput>
           <TouchableOpacity
             style={styles.filterButton}
             onPress={() => {
@@ -54,13 +69,30 @@ const Home = () => {
             <Icon name="bars" size={16} />
           </TouchableOpacity>
         </View>
+        {
+          events.length === 0 && (
+            <View style={{...styles.scrollViewContainer, justifyContent:'center', alignItems:'center'}}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: "#ffffff",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  marginBottom: 30,
+                }}
+              
+              >Aun no se han creado eventos</Text>
+              <Icon name="calendar" color={"#1d1d1d"} size={50} />
+            </View>
+          )
+        }
         <ScrollView
           style={styles.scrollViewContainer}
           refreshControl={
             <RefreshControl
-              refreshing={loading}
+              refreshing={false}
               onRefresh={() => {
-                getEvents(7, facultyId, programId, true);
+                getEvents(7, facultyId, programId, true, query);
               }}
             />
           }
@@ -71,7 +103,7 @@ const Home = () => {
             const isEndReached =
               scrollViewHeight + scrollPosition >= contentHeight - 100;
             if (isEndReached) {
-              getEvents(7, facultyId, programId, false);
+              getEvents(7, facultyId, programId, false, query);
               console.log("scroll");
             }
           }}

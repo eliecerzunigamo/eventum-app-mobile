@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export const homeInviteScreenStyles = StyleSheet.create({
   container: {
     height: "8%",
-    backgroundColor: "#daf5ff",
+    backgroundColor: "#1f1f1f",
     justifyContent: "space-between",
     alignItems: "center",
     paddingLeft: 20,
@@ -14,13 +14,12 @@ export const homeInviteScreenStyles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     textAlign: "center",
-    color: "#000000",
+    color: "#fff",
   },
   button: {
     width: 80,
     height: 32,
-    backgroundColor: "#4d96e9",
-    borderRadius: 10,
+    backgroundColor: "#ff7c4da4",
     justifyContent: "center",
     alignItems: "center",
     elevation: 10,
@@ -37,7 +36,7 @@ export const homeInviteScreenStyles = StyleSheet.create({
   scrollViewContainer: {
     width: "100%",
     height: "90%",
-    backgroundColor: "#5664e6",
+    backgroundColor: "#F2561D",
   },
   scrollView: {
     width: "100%",

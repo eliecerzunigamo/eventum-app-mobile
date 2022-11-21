@@ -11,6 +11,7 @@ import { LoginScreen } from "../views/LoginScreen/LoginScreen";
 import { HomeInviteScreen } from "../views/HomeInviteScreen/HomeInviteScreen";
 import { DetailsScreen } from "../views/DetailsScreen/DetailsScreen";
 import { Events } from "../views/HomeInviteScreen/hooks/useHomeInviteScreen";
+import { CreateEventScreen } from "../views/CreateEventScreen/CreateEventScreen";
 
 const tab = createMaterialBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -32,7 +33,7 @@ const MyTabs = () => {
         name="Favoritos"
         component={FavoriteScreen}
         options={{
-          tabBarColor: "#c0b01c",
+          tabBarColor: "#554e00",
           tabBarIcon: ({ color }) => (
             <Icon name="star" size={20} color={color} />
           ),
@@ -42,7 +43,7 @@ const MyTabs = () => {
         name="Perfil"
         component={UserScreen}
         options={{
-          tabBarColor: "#1cc0c0",
+          tabBarColor: "#552d00",
           tabBarIcon: ({ color }) => (
             <Icon name="user" size={20} color={color} />
           ),
@@ -80,6 +81,11 @@ function Routes() {
             <Stack.Screen
               name="Details"
               component={DetailsScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="CreateEvent"
+              component={CreateEventScreen}
               options={{ headerShown: false }}
             />
           </>

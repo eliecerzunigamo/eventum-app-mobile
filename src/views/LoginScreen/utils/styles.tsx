@@ -3,10 +3,7 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     height: "100%",
-  },
-  backgroundImg: {
-    width: "100%",
-    height: "100%",
+    backgroundColor: "#F2561D",
   },
   scrollContainer: {
     height: "100%",
@@ -14,15 +11,16 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    width: 300,
-    height: 280,
+    width: 250,
+    height: 230,
     marginTop: 30,
+    marginBottom: 30,
   },
   formContainer: {
     width: "80%",
     height: 350,
-    backgroundColor: "#e7e7fc",
-    borderRadius: 20,
+    backgroundColor: "#1f1f1f",
+    borderRadius: 0,
     justifyContent: "space-evenly",
     alignItems: "center",
     elevation: 10,
@@ -31,10 +29,10 @@ export const styles = StyleSheet.create({
   label: {
     fontSize: 20,
     fontWeight: "bold",
-    textShadowColor: "#cfcdcd",
+    textShadowColor: "#868686",
     textShadowOffset: { width: 0, height: 0.5 },
     textShadowRadius: 10,
-    color: "#000000",
+    color: "white",
     fontFamily: "FiraSans-Regular",
   },
   errorLabel: {
@@ -48,15 +46,16 @@ export const styles = StyleSheet.create({
     borderColor: "black",
     width: 200,
     height: 40,
-    backgroundColor: "#dddbff",
+    backgroundColor: "#fff",
     fontFamily: "FiraSans-Regular",
     elevation: 5,
+    fontSize: 12,
   },
   button: {
     width: 80,
     height: 32,
-    backgroundColor: "#4d96e9",
-    borderRadius: 10,
+    backgroundColor: "#F2561D",
+    borderRadius: 0,
     justifyContent: "center",
     alignItems: "center",
     elevation: 10,
@@ -64,7 +63,7 @@ export const styles = StyleSheet.create({
   buttonText: {
     fontSize: 14,
     fontWeight: "bold",
-    textShadowColor: "#aaaaaa",
+    textShadowColor: "#7a7a7a",
     textShadowOffset: { width: 0, height: 0.5 },
     textShadowRadius: 10,
     color: "#ffffff",

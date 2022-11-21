@@ -11,9 +11,14 @@ export interface LoginResponse {
 }
 
 export interface User {
+  _id: string;
   email: string;
+  password: string;
   name: string;
   user_type: string;
+  fac: string;
+  program: string;
+  __v: number;
 }
 
 interface LoginBody {
@@ -50,11 +55,7 @@ export const useLogin = () => {
         type: LoginTypes.login,
         payload: {
           logged: true,
-          user: {
-            email: resp.data.user.email,
-            name: resp.data.user.name,
-            user_type: resp.data.user.user_type,
-          },
+          user: { ...resp.data.user },
         },
       });
       await AsyncStorage.setItem("token", resp.data.token);
@@ -62,11 +63,7 @@ export const useLogin = () => {
         "userInfo",
         JSON.stringify({
           logged: true,
-          user: {
-            email: resp.data.user.email,
-            name: resp.data.user.name,
-            user_type: resp.data.user.user_type,
-          },
+          user: { ...resp.data.user },
         })
       );
     } catch (error: any) {

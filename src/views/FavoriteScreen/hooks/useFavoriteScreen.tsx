@@ -1,20 +1,11 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useApi } from "../../../common/utils/useApi";
+import React from "react";
 import { Events } from "../../HomeInviteScreen/hooks/useHomeInviteScreen";
+import { useApi } from "../../../common/utils/useApi";
+import { Faculties } from "../../HomeScreen/hooks/useHome";
+import { useState, useCallback, useEffect } from "react";
 import { debounce } from "lodash";
 
-export interface Faculties {
-  _id: string;
-  name: string;
-  programs: Program[];
-}
-
-export interface Program {
-  name: string;
-  id: string;
-}
-
-export const useHome = () => {
+export const useFavoriteScreen = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [events, setEvents] = useState<Events[]>([]);
@@ -45,12 +36,12 @@ export const useHome = () => {
       : "";
     try {
       if (reset) {
-        const path = `events/all?page=1&size=${size}${fac}${prog}&query=${query}`;
+        const path = `events/fav-events?page=1&size=${size}${fac}${prog}&query=${query}`;
         const resp = await get<Events[], null>(path, null);
         setEvents(resp.data);
         setPage(1);
       } else {
-        const path = `events/all?page=${
+        const path = `events/fav-events?page=${
           page + 1
         }&size=${size}${fac}${prog}&query=${query}`;
         const resp = await get<Events[], null>(path, null);

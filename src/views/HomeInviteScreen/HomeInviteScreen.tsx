@@ -12,6 +12,7 @@ import { EventItem } from "./components/EventItem";
 import { useNavigation } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { homeInviteScreenStyles as styles } from "./utils/styles";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export const HomeInviteScreen = () => {
   const navigate = useNavigation<StackNavigationProp<any>>();
@@ -35,6 +36,23 @@ export const HomeInviteScreen = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.scrollViewContainer}>
+      {
+          events.length === 0 && (
+            <View style={{...styles.scrollViewContainer, justifyContent:'center', alignItems:'center'}}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: "#ffffff",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  marginBottom: 30,
+                }}
+              
+              >Aun no se han creado eventos</Text>
+              <Icon name="calendar" color={"#1d1d1d"} size={50} />
+            </View>
+          )
+        }
         <ScrollView
           style={styles.scrollView}
           refreshControl={

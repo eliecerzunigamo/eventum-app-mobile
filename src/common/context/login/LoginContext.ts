@@ -1,13 +1,10 @@
 import { createContext } from "react";
 import { LoginTypes } from "./LoginTypes";
+import { User } from "../../../views/LoginScreen/hooks/useLogin";
 
 interface Auth {
   logged: boolean;
-  user?: {
-    email?: string;
-    name?: string;
-    user_type?: string;
-  } | null;
+  user: User | null;
 }
 
 interface IContext {
