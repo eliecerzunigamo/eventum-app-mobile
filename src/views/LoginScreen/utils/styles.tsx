@@ -38,18 +38,19 @@ export const styles = StyleSheet.create({
   errorLabel: {
     fontFamily: "FiraSans-Regular",
     color: "#f75858",
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: "bold",
   },
   input: {
     borderBottomWidth: 1,
     borderColor: "black",
-    width: 200,
-    height: 40,
+    width: "90%",
+    height: 50,
     backgroundColor: "#fff",
     fontFamily: "FiraSans-Regular",
     elevation: 5,
-    fontSize: 12,
+    fontSize: 16,
+    color: "black",
   },
   button: {
     width: 80,

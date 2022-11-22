@@ -29,7 +29,7 @@ export const useHomeInviteScreen = () => {
   const getInitialEvents = async () => {
     setLoading(true);
     try {
-      const path = "events/all?page=1&size=7";
+      const path = "events/all?page=1&size=20";
       const resp = await get<Events[], null>(path, null);
       setEvents(resp.data);
       setPage(2);

@@ -10,7 +10,6 @@ export interface EventToCreate {
     fac: string;
     prog: string;
     date: string;
-    time: string;
     image?: string;
   }
 

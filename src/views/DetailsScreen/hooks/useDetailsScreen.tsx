@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Events } from "../../HomeInviteScreen/hooks/useHomeInviteScreen";
 import { useApi } from "../../../common/utils/useApi";
 import { Alert } from "react-native";
+import messaging from '@react-native-firebase/messaging';
 
 interface FavEvent extends Events {
   isFav: boolean;
@@ -39,9 +40,12 @@ export const useDetailsScreen = () => {
     setLoading(true);
     try {
       const path = `events/fav-events`;
-      const resp = await post<{ event_id: string }, AddedFavEvent, null>(path, {
+      const token = await messaging().getToken();
+      const resp = await post<{ event_id: string, token:string }, AddedFavEvent, null>(path, {
         event_id: id,
+        token
       });
+      console.log(token);
       getFavoriteEvent(id);
     } catch (error) {
       setError(true);

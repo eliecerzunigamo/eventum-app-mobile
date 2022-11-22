@@ -26,14 +26,14 @@ const Home = () => {
   const [programId, setProgramId] = useState("default");
 
   useEffect(() => {
-    getEvents(7, facultyId, programId, true, query);
+    getEvents(20, facultyId, programId, true, query);
   }, [programId, facultyId]);
 
   const isFocused = useIsFocused();
 
   useEffect(() => {
     if (isFocused) {
-      getEvents(7, facultyId, programId, true, query);
+      getEvents(20, facultyId, programId, true, query);
     }
   }, [isFocused]);
 
@@ -92,7 +92,7 @@ const Home = () => {
             <RefreshControl
               refreshing={false}
               onRefresh={() => {
-                getEvents(7, facultyId, programId, true, query);
+                getEvents(20, facultyId, programId, true, query);
               }}
             />
           }
@@ -101,9 +101,9 @@ const Home = () => {
             const scrollViewHeight = e.nativeEvent.layoutMeasurement.height;
             const contentHeight = e.nativeEvent.contentSize.height;
             const isEndReached =
-              scrollViewHeight + scrollPosition >= contentHeight - 100;
+              scrollViewHeight + scrollPosition >= contentHeight - 200;
             if (isEndReached) {
-              getEvents(7, facultyId, programId, false, query);
+              getEvents(20, facultyId, programId, false, query);
               console.log("scroll");
             }
           }}

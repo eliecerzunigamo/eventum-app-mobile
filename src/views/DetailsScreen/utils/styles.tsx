@@ -22,7 +22,6 @@ export const detailsScreenStyles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    padding: 10,
     backgroundColor: "#1f1f1f",
   },
   image: {

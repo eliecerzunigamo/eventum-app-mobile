@@ -70,7 +70,7 @@ export const DetailsScreen = ({ route }: Props) => {
       </View>
       <ScrollView
         style={{
-          padding: 10,
+          width: "100%",
         }}
       >
         <View style={styles.body}>

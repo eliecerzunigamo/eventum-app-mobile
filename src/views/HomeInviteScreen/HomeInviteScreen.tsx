@@ -68,9 +68,9 @@ export const HomeInviteScreen = () => {
             const scrollViewHeight = e.nativeEvent.layoutMeasurement.height;
             const contentHeight = e.nativeEvent.contentSize.height;
             const isEndReached =
-              scrollViewHeight + scrollPosition >= contentHeight - 100;
+              scrollViewHeight + scrollPosition >= contentHeight - 200;
             if (isEndReached) {
-              getEvents(7);
+              getEvents(20);
               console.log("scroll");
             }
           }}

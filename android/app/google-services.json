@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "388442232378",
+    "project_id": "eventum-e305c",
+    "storage_bucket": "eventum-e305c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388442232378:android:00a5ecc6277a4b9d6f8703",
+        "android_client_info": {
+          "package_name": "com.eventumapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "388442232378-qm6hdkhv6c9kvf9upo86pdovo8r3ju4d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_MuRJA7Z0-WP63yVgeectihJzjQ8fvlU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "388442232378-qm6hdkhv6c9kvf9upo86pdovo8r3ju4d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

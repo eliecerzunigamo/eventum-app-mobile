@@ -3,12 +3,10 @@ import { StyleSheet } from "react-native";
 export const eventItemStyles = StyleSheet.create({
   container: {
     display: "flex",
-    flexDirection: "row",
-    width: "90%",
-    height: 125,
+    width: "100%",
     backgroundColor: "#1f1f1f",
-    marginBottom: 10,
-    padding: 10,
+    marginBottom: 20,
+    paddingVertical: 10,
     elevation: 10,
   },
   image: {
@@ -20,18 +18,19 @@ export const eventItemStyles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-evenly",
     marginLeft: 10,
-    width: "70%",
+    width: "100%",
   },
   title: {
-    fontSize: 14,
+    fontSize: 16,
+    paddingLeft:10,
+    paddingBottom: 5,
     fontWeight: "bold",
     color: "#fff",
   },
   description: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: "bold",
-    width: 220,
-    height: 70,
+    paddingTop: 5,
     color: "#dddddd",
   },
   timeContainer: {

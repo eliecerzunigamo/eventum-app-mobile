@@ -30,12 +30,12 @@ export const FavoriteScreen = () => {
 
   useEffect(() => {
     if (isFocused) {
-      getEvents(7, facultyId, programId, true, query);
+      getEvents(20, facultyId, programId, true, query);
     }
   }, [isFocused]);
 
   useEffect(() => {
-    getEvents(7, facultyId, programId, true, query);
+    getEvents(20, facultyId, programId, true, query);
   }, [programId, facultyId]);
 
   const navigate = useNavigation<StackNavigationProp<any>>();
@@ -93,7 +93,7 @@ export const FavoriteScreen = () => {
             <RefreshControl
               refreshing={loading}
               onRefresh={() => {
-                getEvents(7, facultyId, programId, true, query);
+                getEvents(20, facultyId, programId, true, query);
               }}
             />
           }
@@ -102,9 +102,9 @@ export const FavoriteScreen = () => {
             const scrollViewHeight = e.nativeEvent.layoutMeasurement.height;
             const contentHeight = e.nativeEvent.contentSize.height;
             const isEndReached =
-              scrollViewHeight + scrollPosition >= contentHeight - 100;
+              scrollViewHeight + scrollPosition >= contentHeight - 200;
             if (isEndReached) {
-              getEvents(7, facultyId, programId, false, query);
+              getEvents(20, facultyId, programId, false, query);
               console.log("scroll");
             }
           }}

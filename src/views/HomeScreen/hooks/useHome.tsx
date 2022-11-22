@@ -81,7 +81,7 @@ export const useHome = () => {
 
   const handler = useCallback(
     debounce((query) => {
-      getEvents(7, undefined, undefined, true, query);
+      getEvents(20, undefined, undefined, true, query);
     }, 300),
     []
   );

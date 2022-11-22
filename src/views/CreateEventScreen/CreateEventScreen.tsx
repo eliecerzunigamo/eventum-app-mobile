@@ -332,6 +332,7 @@ export const CreateEventScreen = () => {
               alignItems: "center",
               padding: 5,
             }}
+            onPress={() => setOpenDate(true)}
           >
             <Text
               style={{
@@ -339,7 +340,7 @@ export const CreateEventScreen = () => {
                 fontSize: 14,
                 fontWeight: "bold",
               }}
-              onPress={() => setOpenDate(true)}
+             
             >
               {eventDate.toLocaleString("es-ES")}
             </Text>
@@ -371,8 +372,7 @@ export const CreateEventScreen = () => {
                 createEvent({
                   title: eventName,
                   description: eventDescription,
-                  date: eventDate.toISOString().split("T")[0],
-                  time: eventDate.toISOString().split("T")[1].split(".")[0].split(":")[0] + ":" + eventDate.toISOString().split("T")[1].split(".")[0].split(":")[1],
+                  date: eventDate.toISOString(),
                   image: base64,
                   prog: programId!,
                   fac: facultyId,
