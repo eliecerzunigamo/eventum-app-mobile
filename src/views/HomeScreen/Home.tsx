@@ -16,7 +16,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { FiltersModal } from "./components/FiltersModal";
 import { HomeStyles as styles } from "./utils/styles";
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from "@react-navigation/native";
 
 const Home = () => {
   const { loading, error, getEvents, events, setQuery, query } = useHome();
@@ -69,23 +69,28 @@ const Home = () => {
             <Icon name="bars" size={16} />
           </TouchableOpacity>
         </View>
-        {
-          events.length === 0 && (
-            <View style={{...styles.scrollViewContainer, justifyContent:'center', alignItems:'center'}}>
-              <Text
-                style={{
-                  fontSize: 18,
-                  color: "#ffffff",
-                  fontWeight: "bold",
-                  textAlign: "center",
-                  marginBottom: 30,
-                }}
-              
-              >Aun no se han creado eventos</Text>
-              <Icon name="calendar" color={"#1d1d1d"} size={50} />
-            </View>
-          )
-        }
+        {events.length === 0 && (
+          <View
+            style={{
+              ...styles.scrollViewContainer,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                color: "#ffffff",
+                fontWeight: "bold",
+                textAlign: "center",
+                marginBottom: 30,
+              }}
+            >
+              Aun no se han creado eventos
+            </Text>
+            <Icon name="calendar" color={"#1d1d1d"} size={50} />
+          </View>
+        )}
         <ScrollView
           style={styles.scrollViewContainer}
           refreshControl={

@@ -28,98 +28,95 @@ export const UserScreen = () => {
   const { email, name, user_type, fac, program } = user!;
 
   return (
-    <ScrollView
-    
-    >
-    <View
+    <ScrollView>
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          backgroundColor: "#F2561D",
+          paddingBottom: 20,
+        }}
+      >
+        <View
           style={{
-            flex: 1,
-            alignItems: "center",
-            backgroundColor: "#F2561D",
-            paddingBottom: 20,
+            ...HomeStyles.header,
+            justifyContent: "space-between",
+            paddingLeft: 20,
+            paddingRight: 20,
           }}
         >
-          <View
+          <Text style={{ color: "white", fontSize: 20 }}>Perfil</Text>
+          <TouchableOpacity style={HomeStyles.filterButton} onPress={logout}>
+            <Text style={HomeStyles.filterText}>Salir</Text>
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            width: 155,
+            borderRadius: 77.25,
+            height: 155,
+            backgroundColor: "#fdfdfd",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 20,
+            marginBottom: 20,
+          }}
+        >
+          <Image
+            source={require("../../assets/user.png")}
             style={{
-              ...HomeStyles.header,
-              justifyContent: "space-between",
-              paddingLeft: 20,
-              paddingRight: 20,
+              height: 150,
+              width: 150,
             }}
-          >
-            <Text style={{ color: "white", fontSize: 20 }}>Perfil</Text>
-            <TouchableOpacity style={HomeStyles.filterButton} onPress={logout}>
-              <Text style={HomeStyles.filterText}>Salir</Text>
-            </TouchableOpacity>
-          </View>
-          <View
+          />
+        </View>
+
+        <View style={{ width: "100%", height: 5, backgroundColor: "white" }} />
+
+        <View
+          style={{
+            alignItems: "flex-start",
+            paddingTop: 15,
+            flexDirection: "column",
+            width: "100%",
+            paddingLeft: 10,
+          }}
+        >
+          <InfoItem title="Nombre:" value={toTitle(name)} lineWidth={55} />
+
+          <InfoItem
+            title="Tipo de usuario:"
+            value={toTitle(user_type)}
+            lineWidth={100}
+          />
+          <InfoItem title="Facultad:" value={toTitle(fac)} lineWidth={56} />
+          <InfoItem title="Programa:" value={toTitle(program)} lineWidth={65} />
+          <InfoItem title="Email:" value={email} lineWidth={38} />
+        </View>
+        {AdminUserTypes.DirectorDePrograma === user_type && (
+          <TouchableOpacity
             style={{
-              width: 155,
-              borderRadius: 77.25,
-              height: 155,
-              backgroundColor: "#fdfdfd",
-              alignItems: "center",
+              ...HomeStyles.filterButton,
+              marginTop: 50,
+              width: 150,
+              height: 50,
               justifyContent: "center",
-              marginTop: 20,
-              marginBottom: 20,
+              backgroundColor: "#1f1f1f",
             }}
+            onPress={() => navigate.navigate("CreateEvent")}
           >
-            <Image
-              source={require("../../assets/user.png")}
+            <Text
               style={{
-                height: 150,
-                width: 150,
+                ...HomeStyles.filterText,
+                fontSize: 14,
+                color: "#ffffff",
               }}
-            />
-          </View>
-
-          <View style={{ width: "100%", height: 5, backgroundColor: "white" }} />
-
-          <View
-            style={{
-              alignItems: "flex-start",
-              paddingTop: 15,
-              flexDirection: "column",
-              width: "100%",
-              paddingLeft: 10,
-            }}
-          >
-            <InfoItem title="Nombre:" value={toTitle(name)} lineWidth={55} />
-
-            <InfoItem
-              title="Tipo de usuario:"
-              value={toTitle(user_type)}
-              lineWidth={100}
-            />
-            <InfoItem title="Facultad:" value={toTitle(fac)} lineWidth={56} />
-            <InfoItem title="Programa:" value={toTitle(program)} lineWidth={65} />
-            <InfoItem title="Email:" value={email} lineWidth={38} />
-          </View>
-          {AdminUserTypes.DirectorDePrograma === user_type && (
-            <TouchableOpacity
-              style={{
-                ...HomeStyles.filterButton,
-                marginTop: 50,
-                width: 150,
-                height: 50,
-                justifyContent: "center",
-                backgroundColor: "#1f1f1f",
-              }}
-              onPress={() => navigate.navigate("CreateEvent")}
             >
-              <Text
-                style={{
-                  ...HomeStyles.filterText,
-                  fontSize: 14,
-                  color: "#ffffff",
-                }}
-              >
-                Crear evento
-              </Text>
-            </TouchableOpacity>
-          )}
-        </View> 
+              Crear evento
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
     </ScrollView>
-    
   );
 };

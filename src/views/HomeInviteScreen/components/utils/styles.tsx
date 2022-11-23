@@ -22,7 +22,7 @@ export const eventItemStyles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    paddingLeft:10,
+    paddingLeft: 10,
     paddingBottom: 5,
     fontWeight: "bold",
     color: "#fff",

@@ -47,18 +47,15 @@ export const DetailsScreen = ({ route }: Props) => {
       const aspectRatio = width / height;
       setSize({
         width: 230 * aspectRatio,
-        height: 230, 
+        height: 230,
       });
     });
-  },[image_path]);
-
-  
-
+  }, [image_path]);
 
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text style={{...styles.title, fontWeight:'normal'}}>Detalles</Text>
+        <Text style={{ ...styles.title, fontWeight: "normal" }}>Detalles</Text>
         <TouchableOpacity
           style={HomeStyles.filterButton}
           onPress={() => {
@@ -76,9 +73,8 @@ export const DetailsScreen = ({ route }: Props) => {
         <View style={styles.body}>
           <Text style={styles.title}>{toTitle(title)}</Text>
           <Image
-            
             source={{ uri: `${imagesPath}${image_path}` }}
-            style={{...styles.image, ...size, marginTop: 10}}
+            style={{ ...styles.image, ...size, marginTop: 10 }}
           />
           {!event?.isFav ? (
             <TouchableOpacity

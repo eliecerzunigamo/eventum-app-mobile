@@ -42,7 +42,6 @@ export const FavoriteScreen = () => {
 
   return (
     <View>
-
       <FiltersModal
         openFiltersModal={openFiltersModal}
         setOpenFiltersModal={setOpenFiltersModal}
@@ -70,23 +69,28 @@ export const FavoriteScreen = () => {
             <Icon name="bars" size={16} />
           </TouchableOpacity>
         </View>
-        {
-          events.length === 0 && (
-            <View style={{...styles.scrollViewContainer, justifyContent:'center', alignItems:'center'}}>
-              <Text
-                style={{
-                  fontSize: 18,
-                  color: "#ffffff",
-                  fontWeight: "bold",
-                  textAlign: "center",
-                  marginBottom: 30,
-                }}
-              
-              >Aun no has agregado eventos favoritos</Text>
-              <Icon name="star" color={"yellow"} size={50} />
-            </View>
-          )
-        }
+        {events.length === 0 && (
+          <View
+            style={{
+              ...styles.scrollViewContainer,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                color: "#ffffff",
+                fontWeight: "bold",
+                textAlign: "center",
+                marginBottom: 30,
+              }}
+            >
+              Aun no has agregado eventos favoritos
+            </Text>
+            <Icon name="star" color={"yellow"} size={50} />
+          </View>
+        )}
         <ScrollView
           style={styles.scrollViewContainer}
           refreshControl={

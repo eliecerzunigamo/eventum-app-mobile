@@ -18,11 +18,11 @@ import { filtersModalStyles } from "../HomeScreen/components/utils/styles";
 import { Program, useHome } from "../HomeScreen/hooks/useHome";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import DatePicker from "react-native-date-picker";
-import { useCreateEvent } from './hooks/useCreateEvent';
-import { Loading } from '../../common/components/Loading/Loading';
+import { useCreateEvent } from "./hooks/useCreateEvent";
+import { Loading } from "../../common/components/Loading/Loading";
+import { createEventScreen } from "./utils/styles";
 
 export const CreateEventScreen = () => {
-
   const { createEvent, error, loading, success } = useCreateEvent();
 
   const navigate = useNavigation<StackNavigationProp<any>>();
@@ -59,6 +59,19 @@ export const CreateEventScreen = () => {
     return true;
   };
 
+  const handleCreateEvent = () => {
+    eventValidation()
+      ? createEvent({
+          title: eventName,
+          description: eventDescription,
+          date: eventDate.toISOString(),
+          image: base64,
+          prog: programId!,
+          fac: facultyId,
+        })
+      : Alert.alert("Error", "Por favor, llene todos los campos");
+  };
+
   useEffect(() => {
     getFacultiesAndPrograms();
   }, []);
@@ -91,32 +104,36 @@ export const CreateEventScreen = () => {
           width: 200 * aspectRatio,
           height: 200,
         });
-        ;
       });
   }, [base64]);
 
+  const handleImage = () => {
+    launchImageLibrary(
+      { mediaType: "photo", includeBase64: true },
+      (response) => {
+        if (response.didCancel) {
+          console.log("User cancelled image picker");
+        } else {
+          setBase64(
+            `data:${response.assets![0].type};base64,` +
+              response.assets![0].base64
+          );
+          setEventImage(response.assets![0].fileName!);
+        }
+      }
+    );
+  };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-        backgroundColor: "#F2561D",
-        paddingBottom: 20,
-      }}
-    >
-      <Loading
-        open={loading}
-      />
+    <View style={createEventScreen.container}>
+      <Loading open={loading} />
       <View
         style={{
           ...HomeStyles.header,
-          justifyContent: "space-between",
-          paddingLeft: 20,
-          paddingRight: 20,
+          ...createEventScreen.header,
         }}
       >
-        <Text style={{ color: "white", fontSize: 20 }}>Crear evento</Text>
+        <Text style={createEventScreen.title}>Crear evento</Text>
         <TouchableOpacity
           style={HomeStyles.filterButton}
           onPress={() => navigate.goBack()}
@@ -124,28 +141,9 @@ export const CreateEventScreen = () => {
           <Text style={HomeStyles.filterText}>Volver</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView
-        style={{
-          flex: 1,
-          width: "100%",
-          padding: 20,
-        }}
-      >
-        <View
-          style={{
-            paddingBottom: 50,
-          }}
-        >
-          <Text
-            style={{
-              color: "white",
-              fontSize: 14,
-              fontWeight: "bold",
-              marginBottom: 10,
-            }}
-          >
-            Nombre del evento
-          </Text>
+      <ScrollView style={createEventScreen.scrollView}>
+        <View style={createEventScreen.scrollViewContent}>
+          <Text style={createEventScreen.label}>Nombre del evento</Text>
           <TextInput
             onChange={(e) => {
               setEventName(e.nativeEvent.text);
@@ -154,71 +152,45 @@ export const CreateEventScreen = () => {
             style={styles.input}
           />
           <TouchableOpacity
-            onPress={() => {
-              launchImageLibrary(
-                { mediaType: "photo", includeBase64: true },
-                (response) => {
-                  if (response.didCancel) {
-                    console.log("User cancelled image picker");
-                  } else {
-                    setBase64(`data:${response.assets![0].type};base64,` + response.assets![0].base64);
-                    setEventImage(response.assets![0].fileName!);
-                  }
-                }
-              );
-            }}
-            style={{
-              marginTop: 20,
-              marginBottom: 20,
-              borderWidth: 1,
-              borderColor: "black",
-              padding: 10,
-              backgroundColor: 'white',
-            }}
+            onPress={handleImage}
+            style={createEventScreen.imageButton}
           >
-            <Text style={{
-              ...styles.buttonText, color: 'auto',
-              textShadowOffset: { width: 0, height: 0 },
-              textShadowRadius: 0,
-
-            }}>{eventImage.length > 0 ? eventImage : 'Seleccionar imagen'}</Text>
-          </TouchableOpacity>
-         { base64.length > 0 && <View
-            style={{
-              padding: 10,
-              marginBottom: 20,
-            }}
-          >
-            <Image
-              source={{ uri: base64 }}
+            <Text
               style={{
-                ...size,
-                alignSelf: "center",
-                borderWidth: 5,
-                borderColor: "white",
-                backgroundColor: "white",
+                ...styles.buttonText,
+                color: "black",
+                textShadowOffset: { width: 0, height: 0 },
+                textShadowRadius: 0,
               }}
-            />
-          </View>}
+            >
+              {eventImage.length > 0 ? eventImage : "Seleccionar imagen"}
+            </Text>
+          </TouchableOpacity>
+          {base64.length > 0 && (
+            <View
+              style={{
+                padding: 10,
+                marginBottom: 20,
+              }}
+            >
+              <Image
+                source={{ uri: base64 }}
+                style={{
+                  ...size,
+                  ...createEventScreen.imageContainer,
+                }}
+              />
+            </View>
+          )}
 
-          <Text
-            style={{
-              color: "white",
-              fontSize: 14,
-              fontWeight: "bold",
-              marginBottom: 10,
-              marginTop: 10,
-            }}
-          >
-            Descripción del evento
-          </Text>
+          <Text style={createEventScreen.label}>Descripción del evento</Text>
           <TextInput
             onChange={(e) => {
               setEventDescription(e.nativeEvent.text);
             }}
             style={{
-              ...styles.input,
-              width: "80%",
+              backgroundColor: "white",
+              width: "100%",
               height: 150,
               alignItems: "flex-start",
               textAlignVertical: "top",
@@ -239,12 +211,10 @@ export const CreateEventScreen = () => {
           >
             Facultad
           </Text>
-          <View
-            style={{ ...filtersModalStyles.picker, backgroundColor: "white" }}
-          >
+          <View style={{ ...filtersModalStyles.picker, elevation: 0 }}>
             <Picker
               selectedValue={facultyId}
-              style={{ height: 50, width: "100%" }}
+              style={{ height: 50, width: "100%", color: "black" }}
               onValueChange={(itemValue: string, itemIndex) =>
                 setFacultyId(itemValue)
               }
@@ -271,19 +241,8 @@ export const CreateEventScreen = () => {
               ))}
             </Picker>
           </View>
-          <Text
-            style={{
-              color: "white",
-              fontSize: 14,
-              fontWeight: "bold",
-              marginTop: 10,
-            }}
-          >
-            Programa
-          </Text>
-          <View
-            style={{ ...filtersModalStyles.picker, backgroundColor: "white" }}
-          >
+          <Text style={createEventScreen.label}>Programa</Text>
+          <View style={{ ...filtersModalStyles.picker, elevation: 0 }}>
             <Picker
               selectedValue={programId}
               style={{ height: 50, width: "100%" }}
@@ -313,35 +272,12 @@ export const CreateEventScreen = () => {
               ))}
             </Picker>
           </View>
-          <Text
-            style={{
-              color: "white",
-              fontSize: 14,
-              fontWeight: "bold",
-              marginTop: 10,
-            }}
-          >
-            Fecha
-          </Text>
+          <Text style={createEventScreen.label}>Fecha</Text>
           <TouchableOpacity
-            style={{
-              width: "50%",
-              marginTop: 10,
-              backgroundColor: "#551700ac",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: 5,
-            }}
+            style={createEventScreen.dateButton}
             onPress={() => setOpenDate(true)}
           >
-            <Text
-              style={{
-                color: "white",
-                fontSize: 14,
-                fontWeight: "bold",
-              }}
-             
-            >
+            <Text style={createEventScreen.dateButtonText}>
               {eventDate.toLocaleString("es-ES")}
             </Text>
           </TouchableOpacity>
@@ -359,35 +295,10 @@ export const CreateEventScreen = () => {
             }}
           />
           <TouchableOpacity
-            style={{
-              ...HomeStyles.filterButton,
-              marginTop: 50,
-              width: 150,
-              height: 50,
-              justifyContent: "center",
-              backgroundColor: "#1f1f1f",
-            }}
-            onPress={() => {
-              eventValidation() ?
-                createEvent({
-                  title: eventName,
-                  description: eventDescription,
-                  date: eventDate.toISOString(),
-                  image: base64,
-                  prog: programId!,
-                  fac: facultyId,
-                }) :
-                Alert.alert("Error", "Por favor, llene todos los campos");
-            }
-            }
+            style={createEventScreen.creationButton}
+            onPress={handleCreateEvent}
           >
-            <Text
-              style={{
-                ...HomeStyles.filterText,
-                fontSize: 14,
-                color: "#ffffff",
-              }}
-            >
+            <Text style={createEventScreen.creationButtonText}>
               Crear evento
             </Text>
           </TouchableOpacity>
