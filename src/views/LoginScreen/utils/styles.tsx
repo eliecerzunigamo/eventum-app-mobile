@@ -25,6 +25,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     elevation: 10,
     marginBottom: 20,
+    padding: 10,
   },
   label: {
     fontSize: 20,
@@ -44,12 +45,12 @@ export const styles = StyleSheet.create({
   input: {
     borderBottomWidth: 1,
     borderColor: "black",
-    width: "90%",
+    width: "100%",
     height: 50,
     backgroundColor: "#fff",
     fontFamily: "FiraSans-Regular",
     elevation: 5,
-    fontSize: 16,
+    fontSize: 14,
     color: "black",
   },
   button: {

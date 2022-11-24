@@ -189,8 +189,7 @@ export const CreateEventScreen = () => {
               setEventDescription(e.nativeEvent.text);
             }}
             style={{
-              backgroundColor: "white",
-              width: "100%",
+              ...styles.input,
               height: 150,
               alignItems: "flex-start",
               textAlignVertical: "top",
@@ -211,7 +210,7 @@ export const CreateEventScreen = () => {
           >
             Facultad
           </Text>
-          <View style={{ ...filtersModalStyles.picker, elevation: 0 }}>
+          <View style={{ ...filtersModalStyles.picker, elevation: 0, width:'100%' }}>
             <Picker
               selectedValue={facultyId}
               style={{ height: 50, width: "100%", color: "black" }}
@@ -242,7 +241,7 @@ export const CreateEventScreen = () => {
             </Picker>
           </View>
           <Text style={createEventScreen.label}>Programa</Text>
-          <View style={{ ...filtersModalStyles.picker, elevation: 0 }}>
+          <View style={{ ...filtersModalStyles.picker, elevation: 0, width:'100%' }}>
             <Picker
               selectedValue={programId}
               style={{ height: 50, width: "100%" }}

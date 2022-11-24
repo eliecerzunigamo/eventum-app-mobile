@@ -44,7 +44,7 @@ export const createEventScreen = StyleSheet.create({
   },
 
   dateButton: {
-    width: "50%",
+    width: "100%",
     marginTop: 10,
     backgroundColor: "#551700ac",
     justifyContent: "center",
