@@ -1,9 +1,10 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../../common/utils/Enums";
 
 export const homeInviteScreenStyles = StyleSheet.create({
   container: {
     height: "8%",
-    backgroundColor: "#1f1f1f",
+    backgroundColor: Colors.Green,
     justifyContent: "space-between",
     alignItems: "center",
     paddingLeft: 20,
@@ -14,12 +15,12 @@ export const homeInviteScreenStyles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     textAlign: "center",
-    color: "#fff",
+    color: Colors.Light,
   },
   button: {
     width: 80,
     height: 32,
-    backgroundColor: "#ff7c4da4",
+    backgroundColor: Colors.DarkGreen,
     justifyContent: "center",
     alignItems: "center",
     elevation: 10,
@@ -27,20 +28,20 @@ export const homeInviteScreenStyles = StyleSheet.create({
   buttonText: {
     fontSize: 14,
     fontWeight: "bold",
-    textShadowColor: "#aaaaaa",
+    textShadowColor: Colors.Grey,
     textShadowOffset: { width: 0, height: 0.5 },
     textShadowRadius: 10,
-    color: "#ffffff",
+    color: Colors.Light,
     fontFamily: "FiraSans-Regular",
   },
   scrollViewContainer: {
     width: "100%",
     height: "90%",
-    backgroundColor: "#F2561D",
+    backgroundColor: Colors.Blue,
   },
   scrollView: {
     width: "100%",
-    height: "100%",
+    height: "90%",
     marginTop: 20,
   },
   eventItemContainer: {

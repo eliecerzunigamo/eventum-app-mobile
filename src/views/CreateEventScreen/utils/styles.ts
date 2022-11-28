@@ -1,11 +1,12 @@
 import { StyleSheet } from "react-native";
 import { HomeStyles } from "../../HomeScreen/utils/styles";
+import { Colors } from "../../../common/utils/Enums";
 
 export const createEventScreen = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#F2561D",
+    backgroundColor: Colors.Blue,
     paddingBottom: 20,
   },
   header: {
@@ -46,7 +47,7 @@ export const createEventScreen = StyleSheet.create({
   dateButton: {
     width: "100%",
     marginTop: 10,
-    backgroundColor: "#551700ac",
+    backgroundColor: Colors.DarkGreen,
     justifyContent: "center",
     alignItems: "center",
     padding: 5,
@@ -62,7 +63,7 @@ export const createEventScreen = StyleSheet.create({
     width: 150,
     height: 50,
     justifyContent: "center",
-    backgroundColor: "#1f1f1f",
+    backgroundColor: Colors.Grey,
   },
   creationButtonText: {
     ...HomeStyles.filterText,

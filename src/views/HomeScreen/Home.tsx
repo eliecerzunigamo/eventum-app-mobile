@@ -17,6 +17,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { FiltersModal } from "./components/FiltersModal";
 import { HomeStyles as styles } from "./utils/styles";
 import { useIsFocused } from "@react-navigation/native";
+import { Colors } from "../../common/utils/Enums";
 
 const Home = () => {
   const { loading, error, getEvents, events, setQuery, query } = useHome();
@@ -54,7 +55,7 @@ const Home = () => {
         <View style={styles.header}>
           <Icon name="search" size={17} color={"#3a3a3a"} />
           <TextInput
-            placeholderTextColor={"#9c9c9c"}
+            placeholderTextColor={Colors.Blue}
             style={styles.title}
             placeholder={"Buscar"}
             onChangeText={(text) => setQuery(text)}

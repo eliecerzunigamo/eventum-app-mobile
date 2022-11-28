@@ -1,11 +1,12 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../../common/utils/Enums";
 
 export const detailsScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: "#F2561D",
+    backgroundColor: Colors.Blue,
   },
   titleContainer: {
     width: "100%",
@@ -14,15 +15,16 @@ export const detailsScreenStyles = StyleSheet.create({
     paddingRight: 10,
     alignItems: "center",
     flexDirection: "row",
-    backgroundColor: "#1f1f1f",
+    backgroundColor: Colors.Green,
     justifyContent: "space-between",
   },
   title: { fontSize: 20, fontWeight: "bold", color: "#ffffff" },
   body: {
     width: "100%",
+    paddingVertical: 10,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#1f1f1f",
+    backgroundColor: Colors.DarkBlue,
   },
   image: {
     maxWidth: "100%",

@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Dimensions,
+} from "react-native";
 import { Connections } from "../../common/utils/Enums";
 import { Events } from "../HomeInviteScreen/hooks/useHomeInviteScreen";
 import { HomeStyles } from "../HomeScreen/utils/styles";
@@ -37,17 +44,20 @@ export const DetailsScreen = ({ route }: Props) => {
     getFavoriteEvent(_id);
   }, []);
 
+  const dimensions = Dimensions.get("window");
   const [size, setSize] = useState({
-    width: 100,
-    height: 100,
+    width: dimensions.width,
+    height: dimensions.width,
   });
 
   useEffect(() => {
     Image.getSize(`${imagesPath}${image_path}`, (width, height) => {
-      const aspectRatio = width / height;
+      const ratio = dimensions.width / width;
+      const imageHeight = (height * ratio) / 1.2;
+      const imageWidth = dimensions.width / 1.2;
       setSize({
-        width: 230 * aspectRatio,
-        height: 230,
+        width: imageWidth,
+        height: imageHeight,
       });
     });
   }, [image_path]);

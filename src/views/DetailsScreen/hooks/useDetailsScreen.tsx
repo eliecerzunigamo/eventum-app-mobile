@@ -50,8 +50,10 @@ export const useDetailsScreen = () => {
         token,
       });
       getFavoriteEvent(id);
-      messaging().subscribeToTopic("e"+id).then(() => console.log("subscribed")).catch((err) => console.log(err));
-
+      messaging()
+        .subscribeToTopic("e" + id)
+        .then(() => console.log("subscribed"))
+        .catch((err) => console.log(err));
     } catch (error) {
       setError(true);
       console.log(error);
@@ -66,7 +68,10 @@ export const useDetailsScreen = () => {
       const path = `events/fav-events?event_id=${id}`;
       const resp = await _delete<null, null>(path, null);
       getFavoriteEvent(id);
-      messaging().unsubscribeFromTopic("e"+id).then(() => console.log("unsubscribed")).catch((err) => console.log(err));
+      messaging()
+        .unsubscribeFromTopic("e" + id)
+        .then(() => console.log("unsubscribed"))
+        .catch((err) => console.log(err));
     } catch (error: any) {
       setError(true);
     } finally {

@@ -1,17 +1,17 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../../../common/utils/Enums";
 
 export const eventItemStyles = StyleSheet.create({
   container: {
     display: "flex",
     width: "100%",
-    backgroundColor: "#1f1f1f",
+    backgroundColor: Colors.DarkBlue,
     marginBottom: 20,
-    paddingVertical: 10,
+    paddingVertical: 15,
     elevation: 10,
   },
   image: {
-    width: 100,
-    height: 100,
+    marginVertical: 10,
   },
   textContainer: {
     display: "flex",
@@ -25,13 +25,13 @@ export const eventItemStyles = StyleSheet.create({
     paddingLeft: 10,
     paddingBottom: 5,
     fontWeight: "bold",
-    color: "#fff",
+    color: Colors.Light,
   },
   description: {
     fontSize: 14,
     fontWeight: "bold",
     paddingTop: 5,
-    color: "#dddddd",
+    color: Colors.Light,
   },
   timeContainer: {
     flexDirection: "row",

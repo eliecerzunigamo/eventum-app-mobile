@@ -1,18 +1,18 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../../common/utils/Enums";
 
 export const HomeStyles = StyleSheet.create({
   container: {
     width: "100%",
     height: "100%",
-    backgroundColor: "#F2561D",
+    backgroundColor: Colors.Blue,
   },
   header: {
     width: "100%",
     height: 50,
-    padding: 10,
     alignItems: "center",
     flexDirection: "row",
-    backgroundColor: "#1f1f1f",
+    backgroundColor: Colors.Green,
     justifyContent: "space-evenly",
   },
   title: {
@@ -27,7 +27,7 @@ export const HomeStyles = StyleSheet.create({
   filterButton: {
     width: 90,
     height: 32,
-    backgroundColor: "#ff7c4da4",
+    backgroundColor: Colors.DarkGreen,
     justifyContent: "space-evenly",
     alignItems: "center",
     elevation: 10,
@@ -36,16 +36,17 @@ export const HomeStyles = StyleSheet.create({
   filterText: {
     fontSize: 14,
     fontWeight: "bold",
-    textShadowColor: "#616161",
+    textShadowColor: "black",
     textShadowOffset: { width: 0, height: 0.5 },
     textShadowRadius: 10,
-    color: "#ffffff",
+    color: Colors.Light,
     fontFamily: "FiraSans-Regular",
   },
   scrollViewContainer: {
     width: "100%",
     height: "100%",
-    marginTop: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
   },
   eventsContainer: {
     width: "100%",

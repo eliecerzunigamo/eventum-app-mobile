@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../../../common/utils/Enums";
 
 export const filtersModalStyles = StyleSheet.create({
   container: {
@@ -10,7 +11,7 @@ export const filtersModalStyles = StyleSheet.create({
   modal: {
     width: "80%",
     height: "50%",
-    backgroundColor: "#1f1f1f",
+    backgroundColor: Colors.Blue,
     padding: 20,
     elevation: 10,
   },
@@ -44,19 +45,18 @@ export const filtersModalStyles = StyleSheet.create({
   picker: {
     width: "90%",
     height: 35,
-    backgroundColor: "#ff7c4da4",
+    backgroundColor: Colors.Light,
     marginTop: 10,
     marginBottom: 10,
     elevation: 10,
     justifyContent: "center",
     alignItems: "center",
-    color: "white",
   },
   clearButton: {
     position: "absolute",
     bottom: 10,
     right: 10,
-    backgroundColor: "#ff7c4da4",
+    backgroundColor: Colors.Green,
     padding: 10,
   },
   clearButtonTextContainer: {

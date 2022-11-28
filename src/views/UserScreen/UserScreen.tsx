@@ -8,6 +8,7 @@ import { toTitle } from "../../common/utils/toTitle";
 import { useNavigation } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { InfoItem } from "./components/InfoItem";
+import { Colors } from "../../common/utils/Enums";
 
 export enum AdminUserTypes {
   DirectorDePrograma = "director de programa",
@@ -28,12 +29,12 @@ export const UserScreen = () => {
   const { email, name, user_type, fac, program } = user!;
 
   return (
-    <ScrollView>
+    <ScrollView style={{ backgroundColor: Colors.Blue }}>
       <View
         style={{
           flex: 1,
           alignItems: "center",
-          backgroundColor: "#F2561D",
+          backgroundColor: Colors.Blue,
           paddingBottom: 20,
         }}
       >
@@ -71,7 +72,9 @@ export const UserScreen = () => {
           />
         </View>
 
-        <View style={{ width: "100%", height: 5, backgroundColor: "white" }} />
+        <View
+          style={{ width: "100%", height: 5, backgroundColor: Colors.DarkBlue }}
+        />
 
         <View
           style={{
@@ -101,7 +104,7 @@ export const UserScreen = () => {
               width: 150,
               height: 50,
               justifyContent: "center",
-              backgroundColor: "#1f1f1f",
+              backgroundColor: Colors.Grey,
             }}
             onPress={() => navigate.navigate("CreateEvent")}
           >

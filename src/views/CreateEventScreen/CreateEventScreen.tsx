@@ -210,7 +210,13 @@ export const CreateEventScreen = () => {
           >
             Facultad
           </Text>
-          <View style={{ ...filtersModalStyles.picker, elevation: 0, width:'100%' }}>
+          <View
+            style={{
+              ...filtersModalStyles.picker,
+              elevation: 0,
+              width: "100%",
+            }}
+          >
             <Picker
               selectedValue={facultyId}
               style={{ height: 50, width: "100%", color: "black" }}
@@ -241,7 +247,13 @@ export const CreateEventScreen = () => {
             </Picker>
           </View>
           <Text style={createEventScreen.label}>Programa</Text>
-          <View style={{ ...filtersModalStyles.picker, elevation: 0, width:'100%' }}>
+          <View
+            style={{
+              ...filtersModalStyles.picker,
+              elevation: 0,
+              width: "100%",
+            }}
+          >
             <Picker
               selectedValue={programId}
               style={{ height: 50, width: "100%" }}

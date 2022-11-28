@@ -1,9 +1,10 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../../common/utils/Enums";
 
 export const styles = StyleSheet.create({
   container: {
     height: "100%",
-    backgroundColor: "#F2561D",
+    backgroundColor: Colors.Blue,
   },
   scrollContainer: {
     height: "100%",
@@ -11,15 +12,15 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    width: 250,
-    height: 230,
+    width: 200,
+    height: 200,
     marginTop: 30,
     marginBottom: 30,
   },
   formContainer: {
     width: "80%",
     height: 350,
-    backgroundColor: "#1f1f1f",
+    backgroundColor: Colors.Green,
     borderRadius: 0,
     justifyContent: "space-evenly",
     alignItems: "center",
@@ -30,7 +31,7 @@ export const styles = StyleSheet.create({
   label: {
     fontSize: 20,
     fontWeight: "bold",
-    textShadowColor: "#868686",
+    textShadowColor: Colors.Grey,
     textShadowOffset: { width: 0, height: 0.5 },
     textShadowRadius: 10,
     color: "white",
@@ -38,7 +39,7 @@ export const styles = StyleSheet.create({
   },
   errorLabel: {
     fontFamily: "FiraSans-Regular",
-    color: "#f75858",
+    color: Colors.Danger,
     fontSize: 12,
     fontWeight: "bold",
   },
@@ -47,7 +48,7 @@ export const styles = StyleSheet.create({
     borderColor: "black",
     width: "100%",
     height: 50,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.Light,
     fontFamily: "FiraSans-Regular",
     elevation: 5,
     fontSize: 14,
@@ -56,7 +57,7 @@ export const styles = StyleSheet.create({
   button: {
     width: 80,
     height: 32,
-    backgroundColor: "#F2561D",
+    backgroundColor: Colors.Blue,
     borderRadius: 0,
     justifyContent: "center",
     alignItems: "center",
@@ -65,16 +66,16 @@ export const styles = StyleSheet.create({
   buttonText: {
     fontSize: 14,
     fontWeight: "bold",
-    textShadowColor: "#7a7a7a",
+    textShadowColor: Colors.Grey,
     textShadowOffset: { width: 0, height: 0.5 },
     textShadowRadius: 10,
-    color: "#ffffff",
+    color: Colors.Light,
     fontFamily: "FiraSans-Regular",
   },
   link: {
     fontSize: 12,
     fontWeight: "bold",
-    color: "#8b8a8a",
+    color: Colors.Grey,
     fontFamily: "FiraSans-Regular",
   },
 });
