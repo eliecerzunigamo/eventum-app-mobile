@@ -2,11 +2,10 @@
 
 ## Debes tener instaladas las siguientes dependencias para poder ejecutar el proyecto
 
-```
     Node JS: https://nodejs.org/es/
     Java 11 SDK : https://www.oracle.com/co/java/technologies/javase/jdk11-archive-downloads.html
     Android Studio: https://developer.android.com/studio?hl=es-419&gclid=Cj0KCQiAnNacBhDvARIsABnDa6_JWJFM2JtVY9JUvFmaaPh7Ew4D0rfSe5XYpIhtWFGoAeAhHQColt8aAtA4EALw_wcB&gclsrc=aw.ds
-```
+
 ## Pasos a seguir después de tener las dependencias instaladas:
 
 - Se debe buscar en el menu de inicio "Variables de entorno" y se debe acceder a esta configuración: 
