@@ -23,6 +23,8 @@ export default function CustomPicker({
     <View
       style={{
         ...styles.input,
+        marginBottom: 10,
+        marginTop: 5,
       }}
     >
       <Picker

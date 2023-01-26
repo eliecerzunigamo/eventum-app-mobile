@@ -39,8 +39,6 @@ const MyEvents = () => {
     setProgramId("default");
   }, [isFocused]);
 
-  useInitSidebar(setOpenFiltersModal, isFocused);
-
   useEffect(() => {
     if (isFocused) {
       getEvents(10, facultyId, programId, true, query);
@@ -68,14 +66,6 @@ const MyEvents = () => {
         title={"Mis Eventos"}
       />
       <SearchBar setQuery={setQuery} />
-      <FiltersModal
-        openFiltersModal={openFiltersModal}
-        setOpenFiltersModal={setOpenFiltersModal}
-        setFacultyId={setFacultyId}
-        setProgramId={setProgramId}
-        selectedFaculty={facultyId}
-        selectedProgram={programId}
-      />
       <View>
         <ScrollView
           style={styles.scrollViewContainer}

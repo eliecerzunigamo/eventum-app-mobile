@@ -112,6 +112,7 @@ export const useDetailsScreen = () => {
       getFavoriteEvent(id);
     } catch (error) {
       setError(true);
+      console.log(error);
     } finally {
       setLoading(false);
       setLoadingChange(false);

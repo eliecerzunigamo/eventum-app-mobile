@@ -32,8 +32,6 @@ export const FavoriteScreen = () => {
 
   const isFocused = useIsFocused();
 
-  useInitSidebar(setOpenFiltersModal, isFocused);
-
   useEffect(() => {
     if (isFocused) {
       getEvents(10, facultyId, programId, true, query);
@@ -48,14 +46,6 @@ export const FavoriteScreen = () => {
 
   return (
     <View>
-      <FiltersModal
-        openFiltersModal={openFiltersModal}
-        setOpenFiltersModal={setOpenFiltersModal}
-        setFacultyId={setFacultyId}
-        setProgramId={setProgramId}
-        selectedFaculty={facultyId}
-        selectedProgram={programId}
-      />
       <View style={styles.container}>
         <Header
           func={() => {

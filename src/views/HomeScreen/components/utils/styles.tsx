@@ -7,6 +7,7 @@ export const filtersModalStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.Light,
     padding: 10,
+    justifyContent: "space-between",
   },
   title: {
     fontSize: 22,

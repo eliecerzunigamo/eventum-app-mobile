@@ -5,9 +5,7 @@ import {
   ScrollView,
   RefreshControl,
   TouchableWithoutFeedback,
-  TextInput,
 } from "react-native";
-import { FiltersModal } from "../HomeScreen/components/FiltersModal";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -18,26 +16,18 @@ import { SidebarContext } from "../../common/context/sidebar/SidebarContext";
 import { SidebarTypes } from "../../common/context/sidebar/SideBarTypes";
 import { Colors } from "../../common/utils/Enums";
 import { useScheduleScreen } from "./hooks/useScheduleScreen";
-import { useInitSidebar } from "../HomeScreen/hooks/useInitSidebar";
 import { EventItem } from "./components/EventItem";
 
 export const ScheduleScreen = () => {
-  const { loading, error, getEvents, events, setQuery, query } =
+  const { loading, error, getEvents, events, query } =
     useScheduleScreen();
 
   const [openFiltersModal, setOpenFiltersModal] = useState(false);
   const [facultyId, setFacultyId] = useState("default");
   const [programId, setProgramId] = useState("default");
-  const { dispatch, sidebar } = useContext(SidebarContext);
+  const { dispatch } = useContext(SidebarContext);
 
   const isFocused = useIsFocused();
-
-  useEffect(() => {
-    setFacultyId("default");
-    setProgramId("default");
-  }, [isFocused]);
-
-  useInitSidebar(setOpenFiltersModal, isFocused);
 
   useEffect(() => {
     if (isFocused) {
@@ -53,14 +43,6 @@ export const ScheduleScreen = () => {
 
   return (
     <View>
-      <FiltersModal
-        openFiltersModal={openFiltersModal}
-        setOpenFiltersModal={setOpenFiltersModal}
-        setFacultyId={setFacultyId}
-        setProgramId={setProgramId}
-        selectedFaculty={facultyId}
-        selectedProgram={programId}
-      />
       <View style={styles.container}>
         <Header
           func={() => {

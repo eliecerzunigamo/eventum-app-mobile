@@ -18,7 +18,6 @@ export const useHome = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [events, setEvents] = useState<Events[]>([]);
-  const [eventsToDisplay, setEventsToDisplay] = useState<Events[]>([]);
   const [page, setPage] = useState(1);
   const [faculties, setFaculties] = useState<Faculties[]>([]);
   const [query, setQuery] = useState("");
@@ -30,7 +29,8 @@ export const useHome = () => {
     faculty_id?: string,
     program_id?: string,
     reset?: boolean,
-    query?: string
+    query?: string,
+    event_type : string = "default"
   ) => {
     setLoading(true);
     const fac = faculty_id
@@ -43,9 +43,11 @@ export const useHome = () => {
         ? `&program_id=${program_id}`
         : ""
       : "";
+    const event = event_type !== "default" ? `&event_type=${event_type}` : "";
+    
     try {
       if (reset) {
-        const path = `events/all?page=1&size=${size}${fac}${prog}&query=${query}`;
+        const path = `events/all?page=1&size=${size}${fac}${prog}${event}&query=${query}`;
         console.log(path);
         const resp = await get<Events[], null>(path, null);
         setEvents(resp.data);
@@ -96,7 +98,6 @@ export const useHome = () => {
     events,
     getFacultiesAndPrograms,
     faculties,
-    eventsToDisplay,
     setQuery,
     query,
   };

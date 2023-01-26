@@ -19,6 +19,7 @@ import EmptyMessage from "./components/EmptyMessage";
 import SearchBar from "../../common/components/SearchBar/SearchBar";
 import { EventItem } from "./components/EventItem";
 import { useFavoriteScreen } from "../FavoriteScreen/hooks/useFavoriteScreen";
+import { BackHandler } from 'react-native';
 
 const Home = () => {
   const { getEvents, setQuery, query, events } = useHome();
@@ -28,24 +29,20 @@ const Home = () => {
   const [openFiltersModal, setOpenFiltersModal] = useState(false);
   const [facultyId, setFacultyId] = useState("default");
   const [programId, setProgramId] = useState("default");
+  const [eventType, setEventType] = useState("default");
 
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    getEvents(10, facultyId, programId, true, query);
+    getEvents(10, facultyId, programId, true, query, eventType);
     getFavEvents(10, facultyId, programId, true, query);
-  }, [programId, facultyId]);
-
-  useEffect(() => {
-    setFacultyId("default");
-    setProgramId("default");
-  }, [isFocused]);
+  }, [programId, facultyId, eventType]);
 
   useInitSidebar(setOpenFiltersModal, isFocused);
 
   useEffect(() => {
     if (isFocused) {
-      getEvents(10, facultyId, programId, true, query);
+      getEvents(10, facultyId, programId, true, query, eventType);
       getFavEvents(10, facultyId, programId, true, query);
     }
   }, [isFocused]);
@@ -76,6 +73,8 @@ const Home = () => {
         setOpenFiltersModal={setOpenFiltersModal}
         setFacultyId={setFacultyId}
         setProgramId={setProgramId}
+        setEventType={setEventType}
+        selectedEventType={eventType}
         selectedFaculty={facultyId}
         selectedProgram={programId}
       />
@@ -86,7 +85,7 @@ const Home = () => {
             <RefreshControl
               refreshing={false}
               onRefresh={() => {
-                getEvents(10, facultyId, programId, true, query);
+                getEvents(10, facultyId, programId, true, query, eventType);
               }}
             />
           }
@@ -97,7 +96,7 @@ const Home = () => {
             const isEndReached =
               scrollViewHeight + scrollPosition >= contentHeight - 200;
             if (isEndReached) {
-              getEvents(10, facultyId, programId, false, query);
+              getEvents(10, facultyId, programId, false, query, eventType);
             }
           }}
         >

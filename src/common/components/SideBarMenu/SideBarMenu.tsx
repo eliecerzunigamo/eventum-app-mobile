@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import React, { useContext } from "react";
+import { View, Text, TouchableOpacity, Alert, BackHandler } from 'react-native';
+import React, { useContext, useEffect } from "react";
 import { SidebarContext } from "../../context/sidebar/SidebarContext";
 import { SidebarTypes } from "../../context/sidebar/SideBarTypes";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -26,6 +26,11 @@ export default function SideBarMenu() {
           style={{
             backgroundColor: "white",
             margin: 0,
+          }}
+          onBackButtonPress={() => {
+            dispatch({
+              type: SidebarTypes.Close,
+            });
           }}
         >
           <View

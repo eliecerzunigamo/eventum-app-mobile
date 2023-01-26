@@ -116,10 +116,9 @@ export default function RegisterScreen() {
             </Text>
             {userType.value === selectedUserType ? (
               <TouchableOpacity
-                style={styles.noFillCheckBox}
+                style={{...styles.noFillCheckBox, backgroundColor: Colors.Danger, borderColor: Colors.Danger}}
                 onPress={() => setSelectedUserType(userType.value)}
               >
-                <View style={styles.fillCheckBox} />
               </TouchableOpacity>
             ) : (
               <TouchableOpacity

@@ -29,6 +29,7 @@ function Routes() {
   /* @ts-ignore */
   const [sidebar, setSidebar] = useReducer(
     SidebarReducer,
+    /* @ts-ignore */
     {
       open: false,
       sidebarItems: [],
