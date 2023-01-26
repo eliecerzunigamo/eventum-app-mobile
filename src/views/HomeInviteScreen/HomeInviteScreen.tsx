@@ -1,60 +1,68 @@
-import { Header } from "@react-navigation/elements";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
   ScrollView,
   RefreshControl,
-  TouchableOpacity,
+  TextInput,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { useHomeInviteScreen } from "./hooks/useHomeInviteScreen";
 import { EventItem } from "./components/EventItem";
-import { useNavigation } from "@react-navigation/core";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { useIsFocused, useNavigation } from "@react-navigation/core";
 import { homeInviteScreenStyles as styles } from "./utils/styles";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { Colors } from "../../common/utils/Enums";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 export const HomeInviteScreen = () => {
-  const navigate = useNavigation<StackNavigationProp<any>>();
-
-  const { error, loading, getEvents, events, getInitialEvents } =
+  const { loading, getEvents, events, getInitialEvents, setQuery, query } =
     useHomeInviteScreen();
 
   useEffect(() => {
     getInitialEvents();
   }, []);
 
+  const navigate = useNavigation<StackNavigationProp<any>>();
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      getEvents(20, query);
+    }
+  }, [isFocused]);
+
   return (
     <View>
-      <View style={styles.container}>
-        <Text style={styles.title}>Últimos eventos</Text>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigate.push("Login")}
-        >
-          <Text style={styles.buttonText}>Ingresar</Text>
-        </TouchableOpacity>
-      </View>
       <View style={styles.scrollViewContainer}>
+        <Icon
+          style={{
+            position: "absolute",
+            left: 10,
+            top: 10,
+            zIndex: 1,
+          }}
+          name="search"
+          size={17}
+          color={Colors.Dark}
+        />
+        <TextInput
+          placeholderTextColor={Colors.Dark}
+          style={styles.searchInput}
+          placeholder={"Buscar"}
+          onChangeText={(text) => setQuery(text)}
+        ></TextInput>
         {events.length === 0 && (
           <View
             style={{
               ...styles.scrollViewContainer,
               justifyContent: "center",
               alignItems: "center",
+              marginTop: 50,
             }}
           >
-            <Text
-              style={{
-                fontSize: 18,
-                color: "#ffffff",
-                fontWeight: "bold",
-                textAlign: "center",
-                marginBottom: 30,
-              }}
-            >
-              Aun no se han creado eventos
-            </Text>
+            <Text style={styles.emptyText}>Aun no se han creado eventos</Text>
             <Icon name="calendar" color={"#1d1d1d"} size={50} />
           </View>
         )}
@@ -75,14 +83,22 @@ export const HomeInviteScreen = () => {
             const isEndReached =
               scrollViewHeight + scrollPosition >= contentHeight - 200;
             if (isEndReached) {
-              getEvents(20);
-              console.log("scroll");
+              getEvents(20, query);
             }
           }}
         >
           <View style={styles.eventItemContainer}>
             {events.map((event, index) => (
-              <EventItem key={index} event={event} />
+              <TouchableWithoutFeedback
+                key={index}
+                onPress={() => {
+                  navigate.navigate("Details", { event });
+                }}
+              >
+                <View>
+                  <EventItem key={index} event={event} />
+                </View>
+              </TouchableWithoutFeedback>
             ))}
           </View>
         </ScrollView>

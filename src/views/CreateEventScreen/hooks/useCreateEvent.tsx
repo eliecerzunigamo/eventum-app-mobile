@@ -6,35 +6,45 @@ import { useApi } from "../../../common/utils/useApi";
 export interface EventToCreate {
   title: string;
   description: string;
-  fac: string;
-  prog: string;
-  date: string;
+  fac?: string;
+  prog?: string;
+  init_date?: string;
+  end_date?: string;
+  event_type: string;
   image?: string;
+  place?: string;
 }
 
 export const useCreateEvent = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string>("");
+  const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
 
   const { post } = useApi();
 
   const createEvent = async (body: EventToCreate) => {
+    setSuccess(false);
     setLoading(true);
     try {
       const path = "events/create";
-      const resp = await post<EventToCreate, any, null>(path, body);
+      await post<EventToCreate, any, null>(path, body);
       setSuccess(true);
     } catch (error: any) {
-      setError(true);
-      if (error.response.status === 400) {
-        Alert.alert(error.response.data.message);
-      } else {
-        Alert.alert(error);
+      setOpenErrorModal(true);
+      if (!error.response.data.message) {
+        setError("Error de conexión");
+        return;
       }
+
+      setError(error.response.data.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  const closeErrorModal = () => {
+    setOpenErrorModal(false);
   };
 
   return {
@@ -42,5 +52,7 @@ export const useCreateEvent = () => {
     error,
     success,
     createEvent,
+    openErrorModal,
+    closeErrorModal,
   };
 };

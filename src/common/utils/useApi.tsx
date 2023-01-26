@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from "axios";
 import { Connections } from "./Enums";
 
 export const useApi = () => {
-  const BaseUrl = Connections.Local;
+  const BaseUrl = Connections.Prod;
 
   async function get<R, P>(path: string, params?: P) {
     const response: AxiosResponse<R> = await axios.get(BaseUrl + path, {

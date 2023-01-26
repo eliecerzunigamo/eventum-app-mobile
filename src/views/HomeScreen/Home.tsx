@@ -1,47 +1,76 @@
-import { Header } from "@react-navigation/elements";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   View,
-  Text,
-  TouchableOpacity,
   ScrollView,
   RefreshControl,
-  TextInput,
   TouchableWithoutFeedback,
 } from "react-native";
-import { EventItem } from "../HomeInviteScreen/components/EventItem";
 import { useHome } from "./hooks/useHome";
 import { useNavigation } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
-import Icon from "react-native-vector-icons/FontAwesome";
 import { FiltersModal } from "./components/FiltersModal";
 import { HomeStyles as styles } from "./utils/styles";
 import { useIsFocused } from "@react-navigation/native";
-import { Colors } from "../../common/utils/Enums";
+import { useInitSidebar } from "./hooks/useInitSidebar";
+import Header from "../../common/components/Header/Header";
+import { SidebarContext } from "../../common/context/sidebar/SidebarContext";
+import { SidebarTypes } from "../../common/context/sidebar/SideBarTypes";
+import EmptyMessage from "./components/EmptyMessage";
+import SearchBar from "../../common/components/SearchBar/SearchBar";
+import { EventItem } from "./components/EventItem";
+import { useFavoriteScreen } from "../FavoriteScreen/hooks/useFavoriteScreen";
 
 const Home = () => {
-  const { loading, error, getEvents, events, setQuery, query } = useHome();
+  const { getEvents, setQuery, query, events } = useHome();
+  const { dispatch } = useContext(SidebarContext);
+  const { getEvents: getFavEvents, events: favEvents } = useFavoriteScreen();
 
   const [openFiltersModal, setOpenFiltersModal] = useState(false);
   const [facultyId, setFacultyId] = useState("default");
   const [programId, setProgramId] = useState("default");
 
-  useEffect(() => {
-    getEvents(20, facultyId, programId, true, query);
-  }, [programId, facultyId]);
-
   const isFocused = useIsFocused();
 
   useEffect(() => {
+    getEvents(10, facultyId, programId, true, query);
+    getFavEvents(10, facultyId, programId, true, query);
+  }, [programId, facultyId]);
+
+  useEffect(() => {
+    setFacultyId("default");
+    setProgramId("default");
+  }, [isFocused]);
+
+  useInitSidebar(setOpenFiltersModal, isFocused);
+
+  useEffect(() => {
     if (isFocused) {
-      getEvents(20, facultyId, programId, true, query);
+      getEvents(10, facultyId, programId, true, query);
+      getFavEvents(10, facultyId, programId, true, query);
     }
   }, [isFocused]);
 
   const navigate = useNavigation<StackNavigationProp<any>>();
 
   return (
-    <View>
+    <View
+      style={{
+        paddingBottom: 200,
+      }}
+    >
+      <Header
+        func={() => {
+          dispatch({
+            type: SidebarTypes.Open,
+            sidebar: {
+              open: true,
+              sideBarItems: [],
+            },
+          });
+        }}
+        title={"EventUM"}
+      />
+      <SearchBar setQuery={setQuery} />
       <FiltersModal
         openFiltersModal={openFiltersModal}
         setOpenFiltersModal={setOpenFiltersModal}
@@ -50,55 +79,14 @@ const Home = () => {
         selectedFaculty={facultyId}
         selectedProgram={programId}
       />
-
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Icon name="search" size={17} color={"#3a3a3a"} />
-          <TextInput
-            placeholderTextColor={Colors.Blue}
-            style={styles.title}
-            placeholder={"Buscar"}
-            onChangeText={(text) => setQuery(text)}
-          ></TextInput>
-          <TouchableOpacity
-            style={styles.filterButton}
-            onPress={() => {
-              setOpenFiltersModal(true);
-            }}
-          >
-            <Text style={styles.filterText}>Filtros</Text>
-            <Icon name="bars" size={16} />
-          </TouchableOpacity>
-        </View>
-        {events.length === 0 && (
-          <View
-            style={{
-              ...styles.scrollViewContainer,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 18,
-                color: "#ffffff",
-                fontWeight: "bold",
-                textAlign: "center",
-                marginBottom: 30,
-              }}
-            >
-              Aun no se han creado eventos
-            </Text>
-            <Icon name="calendar" color={"#1d1d1d"} size={50} />
-          </View>
-        )}
+      <View>
         <ScrollView
           style={styles.scrollViewContainer}
           refreshControl={
             <RefreshControl
               refreshing={false}
               onRefresh={() => {
-                getEvents(20, facultyId, programId, true, query);
+                getEvents(10, facultyId, programId, true, query);
               }}
             />
           }
@@ -109,21 +97,30 @@ const Home = () => {
             const isEndReached =
               scrollViewHeight + scrollPosition >= contentHeight - 200;
             if (isEndReached) {
-              getEvents(20, facultyId, programId, false, query);
-              console.log("scroll");
+              getEvents(10, facultyId, programId, false, query);
             }
           }}
         >
+          {events.length === 0 && <EmptyMessage />}
           <View style={styles.eventsContainer}>
             {events.map((event, index) => (
               <TouchableWithoutFeedback
                 key={index}
                 onPress={() => {
-                  navigate.navigate("Details", { event });
+                  navigate.navigate("Details", {
+                    event,
+                    previousRoute: "Home",
+                  });
                 }}
               >
                 <View>
-                  <EventItem key={index} event={event} />
+                  <EventItem
+                    key={index}
+                    event={event}
+                    isFavorite={favEvents.some(
+                      (favEvent) => event._id === favEvent._id
+                    )}
+                  />
                 </View>
               </TouchableWithoutFeedback>
             ))}

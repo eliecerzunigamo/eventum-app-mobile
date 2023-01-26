@@ -8,19 +8,31 @@ interface Props {
   lineWidth?: number;
 }
 
-export const InfoItem = ({ title, value, lineWidth = 1 }: Props) => {
+export const InfoItem = ({ title, value }: Props) => {
   return (
-    <View
-      style={{
-        marginBottom: 10,
-      }}
-    >
-      <Text style={{ color: "white", fontSize: 14, fontWeight: "bold" }}>
-        {title}
-      </Text>
-      <Text style={{ color: Colors.Grey, fontSize: 18, fontWeight: "bold" }}>
-        {value}
-      </Text>
-    </View>
+    <>
+      <View
+        style={{
+          marginTop: 10,
+          marginBottom: 8,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          width: "100%",
+        }}
+      >
+        <Text style={{ color: Colors.Dark, fontSize: 16 }}>{title}</Text>
+        <Text style={{ color: Colors.Dark, fontSize: 14, width: "50%" }}>
+          {value}
+        </Text>
+      </View>
+      <View
+        style={{
+          width: "100%",
+          height: 1,
+          backgroundColor: Colors.LightGrey,
+        }}
+      />
+    </>
   );
 };

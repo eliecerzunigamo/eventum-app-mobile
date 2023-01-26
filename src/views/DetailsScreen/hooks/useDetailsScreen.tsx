@@ -17,8 +17,10 @@ export interface AddedFavEvent {
 
 export const useDetailsScreen = () => {
   const [loading, setLoading] = useState(false);
+  const [loadingChange, setLoadingChange] = useState(false);
   const [error, setError] = useState(false);
   const [event, setEvent] = useState<FavEvent>();
+  const [isSchedule, setIsSchedule] = useState(false);
 
   const { get, post, _delete } = useApi();
 
@@ -30,16 +32,29 @@ export const useDetailsScreen = () => {
       setEvent(resp.data);
     } catch (error) {
       setError(true);
-      console.log(error);
     } finally {
       setLoading(false);
     }
   };
 
-  const addFavoriteEvent = async (id: string) => {
+  const getScheduleEvent = async (id: string) => {
     setLoading(true);
     try {
-      const path = `events/fav-events`;
+      const path = `events/schedule-events?event_id=${id}`;
+      const resp = await get<FavEvent, null>(path, null);
+      setIsSchedule(resp.data.isFav);
+    } catch (error) {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addScheduleEvent = async (id: string) => {
+    setLoadingChange(true);
+    setLoading(true);
+    try {
+      const path = `events/schedule-events`;
       const token = await messaging().getToken();
       const resp = await post<
         { event_id: string; token: string },
@@ -49,25 +64,26 @@ export const useDetailsScreen = () => {
         event_id: id,
         token,
       });
-      getFavoriteEvent(id);
+      getScheduleEvent(id);
       messaging()
         .subscribeToTopic("e" + id)
         .then(() => console.log("subscribed"))
         .catch((err) => console.log(err));
     } catch (error) {
       setError(true);
-      console.log(error);
     } finally {
       setLoading(false);
+      setLoadingChange(false);
     }
   };
 
-  const deleteFavoriteEvent = async (id: string) => {
+  const deleteScheduleEvent = async (id: string) => {
+    setLoadingChange(true);
     setLoading(true);
     try {
-      const path = `events/fav-events?event_id=${id}`;
+      const path = `events/schedule-events?event_id=${id}`;
       const resp = await _delete<null, null>(path, null);
-      getFavoriteEvent(id);
+      getScheduleEvent(id);
       messaging()
         .unsubscribeFromTopic("e" + id)
         .then(() => console.log("unsubscribed"))
@@ -76,6 +92,44 @@ export const useDetailsScreen = () => {
       setError(true);
     } finally {
       setLoading(false);
+      setLoadingChange(false);
+    }
+  };
+
+  const addFavoriteEvent = async (id: string) => {
+    setLoadingChange(true);
+    setLoading(true);
+    try {
+      const path = `events/fav-events`;
+      const token = await messaging().getToken();
+      await post<{ event_id: string; token: string }, AddedFavEvent, null>(
+        path,
+        {
+          event_id: id,
+          token,
+        }
+      );
+      getFavoriteEvent(id);
+    } catch (error) {
+      setError(true);
+    } finally {
+      setLoading(false);
+      setLoadingChange(false);
+    }
+  };
+
+  const deleteFavoriteEvent = async (id: string) => {
+    setLoadingChange(true);
+    setLoading(true);
+    try {
+      const path = `events/fav-events?event_id=${id}`;
+      await _delete<null, null>(path, null);
+      getFavoriteEvent(id);
+    } catch (error: any) {
+      setError(true);
+    } finally {
+      setLoading(false);
+      setLoadingChange(false);
     }
   };
 
@@ -83,8 +137,13 @@ export const useDetailsScreen = () => {
     loading,
     error,
     event,
+    isSchedule,
     getFavoriteEvent,
     addFavoriteEvent,
     deleteFavoriteEvent,
+    getScheduleEvent,
+    addScheduleEvent,
+    deleteScheduleEvent,
+    loadingChange,
   };
 };

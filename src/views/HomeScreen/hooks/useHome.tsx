@@ -46,6 +46,7 @@ export const useHome = () => {
     try {
       if (reset) {
         const path = `events/all?page=1&size=${size}${fac}${prog}&query=${query}`;
+        console.log(path);
         const resp = await get<Events[], null>(path, null);
         setEvents(resp.data);
         setPage(1);
@@ -59,7 +60,6 @@ export const useHome = () => {
       }
     } catch (error) {
       setError(true);
-      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -73,7 +73,6 @@ export const useHome = () => {
       setFaculties(resp.data);
     } catch (error) {
       setError(true);
-      console.log(error);
     } finally {
       setLoading(false);
     }

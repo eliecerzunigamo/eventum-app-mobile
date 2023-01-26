@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useContext } from "react";
 import {
   View,
   Text,
@@ -7,69 +7,73 @@ import {
   ScrollView,
   Alert,
   Image,
+  Dimensions,
 } from "react-native";
-import { HomeStyles } from "../HomeScreen/utils/styles";
-import { useNavigation } from "@react-navigation/core";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { styles } from "../LoginScreen/utils/styles";
-import { Picker } from "@react-native-picker/picker";
-import { toTitle } from "../../common/utils/toTitle";
-import { filtersModalStyles } from "../HomeScreen/components/utils/styles";
 import { Program, useHome } from "../HomeScreen/hooks/useHome";
-import { launchCamera, launchImageLibrary } from "react-native-image-picker";
-import DatePicker from "react-native-date-picker";
+import { launchImageLibrary } from "react-native-image-picker";
 import { useCreateEvent } from "./hooks/useCreateEvent";
 import { Loading } from "../../common/components/Loading/Loading";
 import { createEventScreen } from "./utils/styles";
+import { styles as registerStyles } from "../RegisterScreen/utils/styles";
+import Select from "./components/Select";
+import CustomDatePicker from "./components/CustomDatePicker";
+import Icon from "react-native-vector-icons/Feather";
+import { Colors } from "../../common/utils/Enums";
+import Base64Image from "./components/Base64Image";
+import CustomPicker from "./components/CustomPicker";
+import { ErrorModal } from "../RegisterScreen/components/ErrorModal";
+import Header from "../../common/components/Header/Header";
+import { SidebarContext } from "../../common/context/sidebar/SidebarContext";
+import { SidebarTypes } from "../../common/context/sidebar/SideBarTypes";
 
 export const CreateEventScreen = () => {
-  const { createEvent, error, loading, success } = useCreateEvent();
+  const {
+    createEvent,
+    loading,
+    success,
+    closeErrorModal,
+    error,
+    openErrorModal,
+  } = useCreateEvent();
 
-  const navigate = useNavigation<StackNavigationProp<any>>();
+  const { dispatch } = useContext(SidebarContext);
+
   const { faculties, getFacultiesAndPrograms } = useHome();
   const [facultyId, setFacultyId] = useState("default");
   const [programId, setProgramId] = useState("default");
   const [currentPrograms, setCurrentPrograms] = useState<Program[]>([]);
-  const [openDate, setOpenDate] = useState(false);
   const [eventName, setEventName] = useState("");
   const [eventDescription, setEventDescription] = useState("");
   const [eventDate, setEventDate] = useState<Date>(new Date());
-  const [eventImage, setEventImage] = useState("");
+  const [eventEndDate, setEventEndDate] = useState<Date>(new Date());
   const [base64, setBase64] = useState<string>("");
-
-  const eventValidation = () => {
-    if (eventName === "") {
-      return false;
-    }
-    if (eventDescription === "") {
-      return false;
-    }
-    if (eventDate === undefined) {
-      return false;
-    }
-    if (facultyId === "default") {
-      return false;
-    }
-    if (programId === "default") {
-      return false;
-    }
-    if (eventImage === "") {
-      return false;
-    }
-    return true;
-  };
+  const [selectedEventType, setSelectedEventType] = useState<string>("");
+  const [eventPlace, setEventPlace] = useState<string>("");
+  const [haveEndDate, setHaveEndDate] = useState<string>("");
 
   const handleCreateEvent = () => {
-    eventValidation()
-      ? createEvent({
-          title: eventName,
-          description: eventDescription,
-          date: eventDate.toISOString(),
-          image: base64,
-          prog: programId!,
-          fac: facultyId,
-        })
-      : Alert.alert("Error", "Por favor, llene todos los campos");
+    const notice = {
+      title: eventName,
+      description: eventDescription,
+      image: base64,
+      event_type: selectedEventType,
+      prog: programId!,
+      fac: facultyId,
+    };
+
+    const event = {
+      title: eventName,
+      description: eventDescription,
+      image: base64,
+      init_date: eventDate.toISOString(),
+      end_date: haveEndDate.length > 0 && eventEndDate.toISOString(),
+      prog: programId!,
+      fac: facultyId,
+      event_type: selectedEventType,
+      place: eventPlace,
+    };
+    createEvent(selectedEventType === "new" ? notice : event);
   };
 
   useEffect(() => {
@@ -87,7 +91,6 @@ export const CreateEventScreen = () => {
   useEffect(() => {
     if (success) {
       Alert.alert("Evento creado con éxito");
-      navigate.navigate("Home");
     }
   }, [success]);
 
@@ -95,226 +98,240 @@ export const CreateEventScreen = () => {
     width: 100,
     height: 100,
   });
-
   useEffect(() => {
+    const dimensions = Dimensions.get("window");
     if (base64.length > 0)
       Image.getSize(base64, (width, height) => {
-        const aspectRatio = width / height;
+        const ratio = dimensions.width / width;
+        const imageHeight = height * ratio;
+        const imageWidth = dimensions.width;
         setSize({
-          width: 200 * aspectRatio,
-          height: 200,
+          width: imageWidth,
+          height: imageHeight,
         });
       });
   }, [base64]);
+
+  const eventTypes = useMemo(
+    () => [
+      { label: "Evento", value: "event" },
+      { label: "Noticia", value: "new" },
+    ],
+    []
+  );
 
   const handleImage = () => {
     launchImageLibrary(
       { mediaType: "photo", includeBase64: true },
       (response) => {
         if (response.didCancel) {
-          console.log("User cancelled image picker");
         } else {
           setBase64(
             `data:${response.assets![0].type};base64,` +
-              response.assets![0].base64
+            response.assets![0].base64
           );
-          setEventImage(response.assets![0].fileName!);
         }
       }
     );
   };
 
   return (
-    <View style={createEventScreen.container}>
+    <>
+
       <Loading open={loading} />
-      <View
-        style={{
-          ...HomeStyles.header,
-          ...createEventScreen.header,
-        }}
-      >
-        <Text style={createEventScreen.title}>Crear evento</Text>
-        <TouchableOpacity
-          style={HomeStyles.filterButton}
-          onPress={() => navigate.goBack()}
-        >
-          <Text style={HomeStyles.filterText}>Volver</Text>
-        </TouchableOpacity>
-      </View>
-      <ScrollView style={createEventScreen.scrollView}>
-        <View style={createEventScreen.scrollViewContent}>
-          <Text style={createEventScreen.label}>Nombre del evento</Text>
-          <TextInput
-            onChange={(e) => {
-              setEventName(e.nativeEvent.text);
-            }}
-            placeholder="Nombre del evento"
-            style={styles.input}
-          />
-          <TouchableOpacity
-            onPress={handleImage}
-            style={createEventScreen.imageButton}
-          >
-            <Text
-              style={{
-                ...styles.buttonText,
-                color: "black",
-                textShadowOffset: { width: 0, height: 0 },
-                textShadowRadius: 0,
+      <View style={createEventScreen.container}>
+        <Header
+          func={() => {
+            dispatch({
+              type: SidebarTypes.Open,
+            });
+          }}
+          title="Crear evento"
+          previousRoute="Home"
+        />
+        <ErrorModal close={closeErrorModal} error={error} open={openErrorModal} />
+        <ScrollView style={createEventScreen.scrollView}>
+          <View style={createEventScreen.scrollViewContent}>
+            <Text style={registerStyles.userTypeLabel}>Tipo:</Text>
+            {eventTypes.map((eventType, index) => (
+              <View key={index}>
+                <Select
+                  optionLabel={eventType.label}
+                  optionValue={eventType.value}
+                  selectedValue={selectedEventType}
+                  setSelectedValue={setSelectedEventType}
+                />
+              </View>
+            ))}
+            <TextInput
+              onChange={(e) => {
+                setEventName(e.nativeEvent.text);
               }}
-            >
-              {eventImage.length > 0 ? eventImage : "Seleccionar imagen"}
+              placeholder="Titulo"
+              style={styles.input}
+            />
+            <Text style={registerStyles.descriptionLabel}>Ingrese un titulo</Text>
+            <TextInput
+              onChange={(e) => {
+                setEventDescription(e.nativeEvent.text);
+              }}
+              style={{
+                ...styles.input,
+                height: 80,
+                alignItems: "flex-start",
+                textAlignVertical: "top",
+              }}
+              underlineColorAndroid="transparent"
+              placeholder="Detalle"
+              placeholderTextColor="grey"
+              numberOfLines={10}
+              multiline={true}
+            />
+            <Text style={registerStyles.descriptionLabel}>
+              Ingrese una descripción del evento
             </Text>
-          </TouchableOpacity>
-          {base64.length > 0 && (
+            {selectedEventType === "event" && (
+              <>
+                <CustomDatePicker
+                  dateLabel={String(
+                    eventDate.toISOString().split("T")[0]
+                  ).replace(/-/g, "/")}
+                  datePickerLabel={"Fecha inicio"}
+                  selectedDate={eventDate}
+                  setDate={setEventDate}
+                  dateModalTitle={"Seleccione una fecha"}
+                  optionValue="date"
+                  selectedValue="date"
+                  setSelectedValue={() => { }}
+                  dateModalMode="date"
+                />
+                <CustomDatePicker
+                  dateLabel={String(
+                    eventEndDate.toISOString().split("T")[0]
+                  ).replace(/-/g, "/")}
+                  datePickerLabel={"Fecha fin"}
+                  selectedDate={eventEndDate}
+                  setDate={setEventEndDate}
+                  dateModalTitle={"Seleccione una fecha"}
+                  dateModalMode="date"
+                  selectedValue={haveEndDate}
+                  optionValue="final_date"
+                  setSelectedValue={setHaveEndDate}
+                />
+                <CustomDatePicker
+                  dateLabel={
+                    String(eventDate.toISOString().split("T")[1])
+                      .split(".")[0]
+                      .split(":")[0] +
+                    ":" +
+                    String(eventDate.toISOString().split("T")[1])
+                      .split(".")[0]
+                      .split(":")[1]
+                  }
+                  datePickerLabel={"Hora inicio"}
+                  selectedDate={eventDate}
+                  setDate={setEventDate}
+                  dateModalTitle={"Seleccione una hora"}
+                  dateModalMode="time"
+                  optionValue="date"
+                  selectedValue="date"
+                  setSelectedValue={() => { }}
+                />
+                <CustomDatePicker
+                  dateLabel={
+                    String(eventEndDate.toISOString().split("T")[1])
+                      .split(".")[0]
+                      .split(":")[0] +
+                    ":" +
+                    String(eventEndDate.toISOString().split("T")[1])
+                      .split(".")[0]
+                      .split(":")[1]
+                  }
+                  datePickerLabel={"Hora fin"}
+                  selectedDate={eventEndDate}
+                  setDate={setEventEndDate}
+                  dateModalTitle={"Seleccione una hora"}
+                  dateModalMode="time"
+                  selectedValue={haveEndDate}
+                  optionValue="final_date"
+                  setSelectedValue={() => { }}
+                />
+                <TextInput
+                  onChange={(e) => {
+                    setEventPlace(e.nativeEvent.text);
+                  }}
+                  placeholder="Lugar"
+                  style={{ ...styles.input, marginTop: 10, marginBottom: 10 }}
+                />
+                <Text style={registerStyles.descriptionLabel}>
+                  Ingrese el lugar del evento
+                </Text>
+              </>
+            )}
+
+            <CustomPicker
+              defaultValue="Facultad"
+              selectedValue={facultyId}
+              setSelectedValue={setFacultyId}
+              values={faculties}
+            />
+
+            <CustomPicker
+              defaultValue="Programa"
+              selectedValue={programId}
+              setSelectedValue={setProgramId}
+              values={currentPrograms}
+            />
             <View
               style={{
-                padding: 10,
-                marginBottom: 20,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
-              <Image
-                source={{ uri: base64 }}
+              <View>
+                <Text style={registerStyles.userTypeLabel}>Afiche:</Text>
+                <Text
+                  style={{ ...registerStyles.descriptionLabel, marginLeft: 0 }}
+                >
+                  Archivo en .JPG o .PNG
+                </Text>
+              </View>
+              <TouchableOpacity
+                onPress={handleImage}
                 style={{
-                  ...size,
-                  ...createEventScreen.imageContainer,
+                  ...styles.input,
+                  width: "auto",
+                  height: "auto",
+                  padding: 10,
                 }}
-              />
+              >
+                <Icon name="upload" size={20} color={Colors.Orange} />
+              </TouchableOpacity>
             </View>
-          )}
+            {base64.length > 0 && <Base64Image base64={base64} size={size} />}
+            <TouchableOpacity
+              style={{
+                ...styles.button,
+                backgroundColor: Colors.Orange,
+                height: 50,
+                width: 100,
+                marginTop: 10,
+              }}
+              onPress={handleCreateEvent}
+            >
+              <Text
+                style={{
+                  ...styles.buttonText,
+                }}
+              >
+                Crear
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </View>
+    </>
 
-          <Text style={createEventScreen.label}>Descripción del evento</Text>
-          <TextInput
-            onChange={(e) => {
-              setEventDescription(e.nativeEvent.text);
-            }}
-            style={{
-              ...styles.input,
-              height: 150,
-              alignItems: "flex-start",
-              textAlignVertical: "top",
-            }}
-            underlineColorAndroid="transparent"
-            placeholder="Descripción del evento"
-            placeholderTextColor="grey"
-            numberOfLines={10}
-            multiline={true}
-          />
-          <Text
-            style={{
-              color: "white",
-              fontSize: 14,
-              fontWeight: "bold",
-              marginTop: 10,
-            }}
-          >
-            Facultad
-          </Text>
-          <View
-            style={{
-              ...filtersModalStyles.picker,
-              elevation: 0,
-              width: "100%",
-            }}
-          >
-            <Picker
-              selectedValue={facultyId}
-              style={{ height: 50, width: "100%", color: "black" }}
-              onValueChange={(itemValue: string, itemIndex) =>
-                setFacultyId(itemValue)
-              }
-            >
-              {facultyId === "default" && (
-                <Picker.Item
-                  style={{
-                    fontSize: 12.5,
-                  }}
-                  key={"default"}
-                  label={toTitle("Seleccione un programa")}
-                  value={"default"}
-                />
-              )}
-              {faculties.map((faculty) => (
-                <Picker.Item
-                  style={{
-                    fontSize: 12.5,
-                  }}
-                  key={faculty._id}
-                  label={toTitle(faculty.name)}
-                  value={faculty.name}
-                />
-              ))}
-            </Picker>
-          </View>
-          <Text style={createEventScreen.label}>Programa</Text>
-          <View
-            style={{
-              ...filtersModalStyles.picker,
-              elevation: 0,
-              width: "100%",
-            }}
-          >
-            <Picker
-              selectedValue={programId}
-              style={{ height: 50, width: "100%" }}
-              onValueChange={(itemValue: string, itemIndex) =>
-                setProgramId(itemValue)
-              }
-            >
-              {programId === "default" && (
-                <Picker.Item
-                  style={{
-                    fontSize: 12.5,
-                  }}
-                  key={"default"}
-                  label={toTitle("Seleccione un programa")}
-                  value={"default"}
-                />
-              )}
-              {currentPrograms.map((program) => (
-                <Picker.Item
-                  style={{
-                    fontSize: 12,
-                  }}
-                  key={program.id}
-                  label={toTitle(program.name)}
-                  value={program.name}
-                />
-              ))}
-            </Picker>
-          </View>
-          <Text style={createEventScreen.label}>Fecha</Text>
-          <TouchableOpacity
-            style={createEventScreen.dateButton}
-            onPress={() => setOpenDate(true)}
-          >
-            <Text style={createEventScreen.dateButtonText}>
-              {eventDate.toLocaleString("es-ES")}
-            </Text>
-          </TouchableOpacity>
-          <DatePicker
-            title={"Seleccione una fecha"}
-            modal
-            open={openDate}
-            date={eventDate}
-            onConfirm={(date) => {
-              setOpenDate(false);
-              setEventDate(date);
-            }}
-            onCancel={() => {
-              setOpenDate(false);
-            }}
-          />
-          <TouchableOpacity
-            style={createEventScreen.creationButton}
-            onPress={handleCreateEvent}
-          >
-            <Text style={createEventScreen.creationButtonText}>
-              Crear evento
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </View>
   );
 };

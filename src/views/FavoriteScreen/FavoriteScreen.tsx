@@ -1,9 +1,7 @@
-import { Header } from "@react-navigation/elements";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
   ScrollView,
   RefreshControl,
   TouchableWithoutFeedback,
@@ -17,6 +15,11 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { HomeStyles as styles } from "../HomeScreen/utils/styles";
 import { useFavoriteScreen } from "./hooks/useFavoriteScreen";
 import { useIsFocused } from "@react-navigation/native";
+import Header from "../../common/components/Header/Header";
+import { SidebarContext } from "../../common/context/sidebar/SidebarContext";
+import { SidebarTypes } from "../../common/context/sidebar/SideBarTypes";
+import { Colors } from "../../common/utils/Enums";
+import { useInitSidebar } from "../HomeScreen/hooks/useInitSidebar";
 
 export const FavoriteScreen = () => {
   const { loading, error, getEvents, events, setQuery, query } =
@@ -25,17 +28,20 @@ export const FavoriteScreen = () => {
   const [openFiltersModal, setOpenFiltersModal] = useState(false);
   const [facultyId, setFacultyId] = useState("default");
   const [programId, setProgramId] = useState("default");
+  const { dispatch } = useContext(SidebarContext);
 
   const isFocused = useIsFocused();
 
+  useInitSidebar(setOpenFiltersModal, isFocused);
+
   useEffect(() => {
     if (isFocused) {
-      getEvents(20, facultyId, programId, true, query);
+      getEvents(10, facultyId, programId, true, query);
     }
   }, [isFocused]);
 
   useEffect(() => {
-    getEvents(20, facultyId, programId, true, query);
+    getEvents(10, facultyId, programId, true, query);
   }, [programId, facultyId]);
 
   const navigate = useNavigation<StackNavigationProp<any>>();
@@ -51,24 +57,18 @@ export const FavoriteScreen = () => {
         selectedProgram={programId}
       />
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Icon name="search" size={17} color={"#3a3a3a"} />
-          <TextInput
-            placeholderTextColor={"#9c9c9c"}
-            style={styles.title}
-            placeholder={"Buscar"}
-            onChangeText={(text) => setQuery(text)}
-          ></TextInput>
-          <TouchableOpacity
-            style={styles.filterButton}
-            onPress={() => {
-              setOpenFiltersModal(true);
-            }}
-          >
-            <Text style={styles.filterText}>Filtros</Text>
-            <Icon name="bars" size={16} />
-          </TouchableOpacity>
-        </View>
+        <Header
+          func={() => {
+            dispatch({
+              type: SidebarTypes.Open,
+              sidebar: {
+                open: true,
+                sideBarItems: [],
+              },
+            });
+          }}
+          title={"Eventos Favoritos"}
+        />
         {events.length === 0 && (
           <View
             style={{
@@ -77,18 +77,17 @@ export const FavoriteScreen = () => {
               alignItems: "center",
             }}
           >
+            <Icon name="star" color={"yellow"} size={50} />
             <Text
               style={{
                 fontSize: 18,
-                color: "#ffffff",
-                fontWeight: "bold",
+                color: Colors.Dark,
                 textAlign: "center",
-                marginBottom: 30,
+                marginTop: 30,
               }}
             >
               Aun no has agregado eventos favoritos
             </Text>
-            <Icon name="star" color={"yellow"} size={50} />
           </View>
         )}
         <ScrollView
@@ -109,7 +108,6 @@ export const FavoriteScreen = () => {
               scrollViewHeight + scrollPosition >= contentHeight - 200;
             if (isEndReached) {
               getEvents(20, facultyId, programId, false, query);
-              console.log("scroll");
             }
           }}
         >
@@ -118,7 +116,10 @@ export const FavoriteScreen = () => {
               <TouchableWithoutFeedback
                 key={index}
                 onPress={() => {
-                  navigate.navigate("Details", { event });
+                  navigate.navigate("Details", {
+                    event,
+                    previousRoute: "Favoritos",
+                  });
                 }}
               >
                 <View>

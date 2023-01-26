@@ -10,14 +10,20 @@ export interface LoginResponse {
   user: User;
 }
 
+export type UserType =
+  | "estudiante"
+  | "director de programa"
+  | "docente"
+  | "profesional"
+  | "otro";
 export interface User {
   _id: string;
   email: string;
   password: string;
   name: string;
-  user_type: string;
-  fac: string;
-  program: string;
+  user_type: UserType;
+  phone: string;
+  age: string;
   __v: number;
 }
 

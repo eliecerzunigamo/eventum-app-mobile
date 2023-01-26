@@ -5,33 +5,31 @@ export const eventItemStyles = StyleSheet.create({
   container: {
     display: "flex",
     width: "100%",
-    backgroundColor: Colors.DarkBlue,
+    backgroundColor: Colors.Light,
     marginBottom: 20,
-    paddingVertical: 15,
     elevation: 10,
+    paddingBottom: 20,
   },
-  image: {
-    marginVertical: 10,
-  },
+  image: {},
   textContainer: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-evenly",
-    marginLeft: 10,
     width: "100%",
+    padding: 10,
   },
   title: {
-    fontSize: 16,
+    fontSize: 24,
     paddingLeft: 10,
     paddingBottom: 5,
     fontWeight: "bold",
-    color: Colors.Light,
+    color: Colors.Dark,
   },
   description: {
     fontSize: 14,
-    fontWeight: "bold",
+    fontWeight: "normal",
     paddingTop: 5,
-    color: Colors.Light,
+    color: Colors.Dark,
   },
   timeContainer: {
     flexDirection: "row",
@@ -40,10 +38,8 @@ export const eventItemStyles = StyleSheet.create({
   },
   hourContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
     height: 20,
-    width: 45,
   },
   dateContainer: {
     flexDirection: "row",

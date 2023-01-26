@@ -3,6 +3,9 @@ import Routes from "./src/routes/Routes";
 import { AuthProvider } from "./src/common/components/AuthProvider/AuthProvider";
 import messaging from "@react-native-firebase/messaging";
 import { Alert } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import SideBarMenu from "./src/common/components/SideBarMenu/SideBarMenu";
+import { SidebarContext } from "./src/common/context/sidebar/SidebarContext";
 
 const App = () => {
   useEffect(() => {
@@ -11,7 +14,6 @@ const App = () => {
         JSON.stringify(remoteMessage.notification?.title),
         JSON.stringify(remoteMessage.notification?.body)
       );
-      console.log(new Date().toLocaleString());
     });
 
     return () => {
@@ -20,9 +22,11 @@ const App = () => {
   }, []);
 
   return (
-    <AuthProvider>
-      <Routes />
-    </AuthProvider>
+    <NavigationContainer>
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
+    </NavigationContainer>
   );
 };
 

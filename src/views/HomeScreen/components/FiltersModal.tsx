@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Picker } from "@react-native-picker/picker";
+import React, { useContext, useEffect, useState } from "react";
 import { Modal, Text, TouchableOpacity, View, StyleSheet } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
 import { useHome, Program } from "../hooks/useHome";
-import { toTitle } from "../../../common/utils/toTitle";
 import { filtersModalStyles as styles } from "./utils/styles";
+import Header from "../../../common/components/Header/Header";
+import { Colors } from "../../../common/utils/Enums";
+import { SidebarContext } from "../../../common/context/sidebar/SidebarContext";
+import { SidebarTypes } from "../../../common/context/sidebar/SideBarTypes";
+import CustomPicker from "./CustomPicker";
+import { LoginContext } from "../../../common/context/login/LoginContext";
 
 interface Props {
   openFiltersModal: boolean;
@@ -25,6 +28,9 @@ export const FiltersModal = ({
 }: Props) => {
   const { faculties, getFacultiesAndPrograms } = useHome();
   const [currentPrograms, setCurrentPrograms] = useState<Program[]>([]);
+  const { dispatch } = useContext(SidebarContext);
+
+  const { auth } = useContext(LoginContext);
 
   useEffect(() => {
     getFacultiesAndPrograms();
@@ -38,94 +44,75 @@ export const FiltersModal = ({
     setProgramId("default");
   }, [selectedFaculty]);
 
+  console.log(selectedProgram);
+
   return (
-    <Modal visible={openFiltersModal} animationType="fade" transparent={true}>
+    <Modal
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100%",
+        width: "100%",
+      }}
+      visible={openFiltersModal}
+      animationType="fade"
+      transparent={true}
+    >
+      <Header
+        func={() => {
+          setOpenFiltersModal(false);
+          dispatch({ type: SidebarTypes.Open });
+        }}
+        title={"Filtros"}
+        leftFunc={() => {
+          setOpenFiltersModal(false);
+        }}
+      />
       <View style={styles.container}>
-        <View style={styles.modal}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>Filtros</Text>
-            <TouchableOpacity onPress={() => setOpenFiltersModal(false)}>
-              <Icon name="close" size={20} color="white" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.line} />
-          <View style={styles.pickerContainer}>
-            <Text style={styles.pickerLabel}>Facultad</Text>
-            <View style={styles.picker}>
-              <Picker
-                selectedValue={selectedFaculty}
-                style={{ height: 50, width: "100%" }}
-                onValueChange={(itemValue: string, itemIndex) =>
-                  setFacultyId(itemValue)
-                }
-              >
-                {selectedFaculty === "default" && (
-                  <Picker.Item
-                    style={{
-                      fontSize: 12.5,
-                    }}
-                    key={"default"}
-                    label={toTitle("Seleccione un programa")}
-                    value={"default"}
-                  />
-                )}
-                {faculties.map((faculty) => (
-                  <Picker.Item
-                    style={{
-                      fontSize: 12.5,
-                    }}
-                    key={faculty._id}
-                    label={toTitle(faculty.name)}
-                    value={faculty._id}
-                  />
-                ))}
-              </Picker>
-            </View>
-            <Text style={styles.pickerLabel}>Programa</Text>
-            <View style={styles.picker}>
-              <Picker
-                selectedValue={selectedProgram}
-                style={{ height: 50, width: "100%" }}
-                onValueChange={(itemValue: string, itemIndex) =>
-                  setProgramId(itemValue)
-                }
-              >
-                {selectedProgram === "default" && (
-                  <Picker.Item
-                    style={{
-                      fontSize: 12.5,
-                    }}
-                    key={"default"}
-                    label={toTitle("Seleccione un programa")}
-                    value={"default"}
-                  />
-                )}
-                {currentPrograms.map((program) => (
-                  <Picker.Item
-                    style={{
-                      fontSize: 12,
-                    }}
-                    key={program.id}
-                    label={toTitle(program.name)}
-                    value={program.id}
-                  />
-                ))}
-              </Picker>
-            </View>
-          </View>
-          <TouchableOpacity
-            style={styles.clearButton}
-            onPress={() => {
-              setFacultyId("default");
-              setProgramId("default");
-              setOpenFiltersModal(false);
-            }}
-          >
-            <View style={styles.clearButtonTextContainer}>
-              <Text style={styles.clearButtonText}>Limpiar</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+        <Text style={styles.title}>Universidad del Magdalena</Text>
+        <View style={styles.line} />
+        <Text
+          style={{
+            fontSize: 10,
+            color: Colors.Dark,
+            marginBottom: 10,
+          }}
+        >
+          Seleccione las facultades y programas de interés
+        </Text>
+        <CustomPicker
+          defaultValue="Facultad"
+          selectedValue={selectedFaculty}
+          setSelectedValue={setFacultyId}
+          values={faculties}
+        />
+
+        <CustomPicker
+          defaultValue="Programa"
+          selectedValue={selectedProgram}
+          setSelectedValue={setProgramId}
+          values={currentPrograms}
+          isPrimary={false}
+        />
+
+        <TouchableOpacity
+          style={{
+            ...styles.clearButton,
+            backgroundColor:
+              auth.user?.user_type === "director de programa" ||
+              auth.user?.user_type === "docente"
+                ? Colors.LightOrange
+                : Colors.Blue,
+          }}
+          onPress={() => {
+            setFacultyId("default");
+            setProgramId("default");
+            setOpenFiltersModal(false);
+          }}
+        >
+          <Text style={styles.clearButtonText}>Limpiar</Text>
+        </TouchableOpacity>
       </View>
     </Modal>
   );

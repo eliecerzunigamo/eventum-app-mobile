@@ -6,7 +6,7 @@ export const createEventScreen = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: Colors.Blue,
+    backgroundColor: Colors.Light,
     paddingBottom: 20,
   },
   header: {

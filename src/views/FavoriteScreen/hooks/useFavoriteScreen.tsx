@@ -50,7 +50,6 @@ export const useFavoriteScreen = () => {
       }
     } catch (error) {
       setError(true);
-      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -64,7 +63,6 @@ export const useFavoriteScreen = () => {
       setFaculties(resp.data);
     } catch (error) {
       setError(true);
-      console.log(error);
     } finally {
       setLoading(false);
     }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,41 +7,63 @@ import {
   ScrollView,
   Dimensions,
 } from "react-native";
-import { Connections } from "../../common/utils/Enums";
+import { Connections, Colors } from "../../common/utils/Enums";
 import { Events } from "../HomeInviteScreen/hooks/useHomeInviteScreen";
-import { HomeStyles } from "../HomeScreen/utils/styles";
-import { useNavigation } from "@react-navigation/core";
-import { StackNavigationProp } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { eventItemStyles } from "../HomeInviteScreen/components/utils/styles";
 import { toTitle } from "../../common/utils/toTitle";
 import { detailsScreenStyles as styles } from "./utils/styles";
 import { useDetailsScreen } from "./hooks/useDetailsScreen";
+import { LoginContext } from "../../common/context/login/LoginContext";
+import { styles as loginStyles } from "../../views/LoginScreen/utils/styles";
+import EventDetails from "./components/EventDetails";
+import Header from "../../common/components/Header/Header";
+import { SidebarContext } from "../../common/context/sidebar/SidebarContext";
+import { SidebarTypes } from "../../common/context/sidebar/SideBarTypes";
+import { Loading } from "../../common/components/Loading/Loading";
 
 interface Props {
   route?: {
     params: {
       event: Events;
+      previousRoute: string;
     };
   };
 }
 
 export const DetailsScreen = ({ route }: Props) => {
   const imagesPath = Connections.LocalImage;
-  const { title, description, date, time, __v, _id, fac, image_path, prog } =
-    route!.params.event;
-  const navigation = useNavigation<StackNavigationProp<any>>();
+  const {
+    title,
+    description,
+    _id,
+    image_path,
+    end_date,
+    end_time,
+    init_date,
+    init_time,
+    event_type,
+    place,
+  } = route!.params.event;
 
+  const { auth } = useContext(LoginContext);
   const {
     addFavoriteEvent,
     deleteFavoriteEvent,
     getFavoriteEvent,
     event,
-    loading,
+    addScheduleEvent,
+    deleteScheduleEvent,
+    getScheduleEvent,
+    isSchedule,
+    loadingChange,
   } = useDetailsScreen();
+
+  const { dispatch } = useContext(SidebarContext);
 
   useEffect(() => {
     getFavoriteEvent(_id);
+    getScheduleEvent(_id);
   }, []);
 
   const dimensions = Dimensions.get("window");
@@ -53,8 +75,8 @@ export const DetailsScreen = ({ route }: Props) => {
   useEffect(() => {
     Image.getSize(`${imagesPath}${image_path}`, (width, height) => {
       const ratio = dimensions.width / width;
-      const imageHeight = (height * ratio) / 1.2;
-      const imageWidth = dimensions.width / 1.2;
+      const imageHeight = height * ratio;
+      const imageWidth = dimensions.width;
       setSize({
         width: imageWidth,
         height: imageHeight,
@@ -64,115 +86,137 @@ export const DetailsScreen = ({ route }: Props) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Text style={{ ...styles.title, fontWeight: "normal" }}>Detalles</Text>
-        <TouchableOpacity
-          style={HomeStyles.filterButton}
-          onPress={() => {
-            navigation.goBack();
-          }}
-        >
-          <Text style={HomeStyles.filterText}>Atrás</Text>
-        </TouchableOpacity>
-      </View>
+      <Loading open={loadingChange} />
+      <Header
+        func={() => {
+          dispatch({
+            type: SidebarTypes.Open,
+          });
+        }}
+        title="Detalles"
+        previousRoute={route!.params.previousRoute}
+      />
       <ScrollView
         style={{
           width: "100%",
         }}
       >
         <View style={styles.body}>
-          <Text style={styles.title}>{toTitle(title)}</Text>
           <Image
             source={{ uri: `${imagesPath}${image_path}` }}
             style={{ ...styles.image, ...size, marginTop: 10 }}
           />
-          {!event?.isFav ? (
-            <TouchableOpacity
-              onPress={() => {
-                addFavoriteEvent(_id);
-              }}
-              style={styles.favButton}
-            >
-              <Text style={styles.favButtonText}>Añadir a favoritos</Text>
-              <Icon name="star-o" size={20} color={"#3b3b3b"} />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              onPress={() => {
-                deleteFavoriteEvent(_id);
-              }}
-              style={styles.removeFavButton}
-            >
-              <Text style={styles.removeButtonText}>Remover de favoritos</Text>
-              <Icon name="remove" size={20} color={"#ffffff"} />
-            </TouchableOpacity>
-          )}
-          <View style={styles.eventInfoContainer}>
-            <View style={{ ...eventItemStyles.hourContainer, width: 85 }}>
-              <Text style={{ fontWeight: "bold", color: "#fff" }}>Hora: </Text>
-              <Text
-                style={{
-                  fontWeight: "bold",
-                  color: "#fff",
-                  fontSize: 12,
-                }}
-              >
-                {time}
-              </Text>
-              <Icon name="clock-o" size={12} color={"#fff"} />
-            </View>
-            <View style={{ ...eventItemStyles.dateContainer, width: 130 }}>
-              <Text style={{ fontWeight: "bold", color: "#fff" }}>Fecha: </Text>
-              <Text
-                style={{
-                  fontWeight: "bold",
-                  color: "#fff",
-                  fontSize: 12,
-                }}
-              >
-                {String(date)}
-              </Text>
-              <Icon name="calendar" size={12} color={"#fff"} />
-            </View>
-          </View>
-          <View style={styles.hourContainer}>
-            <View>
-              <Text style={{ fontWeight: "bold", color: "#fff" }}>
-                Facultad:{" "}
-              </Text>
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: "#fff",
-                }}
-              >
-                {toTitle(fac)}
-              </Text>
-            </View>
-            <View>
-              <Text style={{ fontWeight: "bold", color: "#fff" }}>
-                Programa:{" "}
-              </Text>
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: "#fff",
-                }}
-              >
-                {toTitle(prog)}
-              </Text>
-            </View>
-          </View>
-          <Text
+          <View
             style={{
-              fontSize: 13,
-              color: "#fff",
-              marginTop: 20,
-              paddingBottom: 20,
+              padding: 5,
             }}
           >
-            {description}
-          </Text>
+            <Text style={styles.title}>{toTitle(title)}</Text>
+            <EventDetails
+              end_date={end_date}
+              end_time={end_time}
+              event_type={event_type}
+              init_date={init_date}
+              init_time={init_time}
+              place={place}
+            />
+            <Text
+              style={{
+                color: Colors.Dark,
+                marginTop: 20,
+                paddingBottom: 20,
+              }}
+            >
+              {description}
+            </Text>
+          </View>
+        </View>
+        <View
+          style={{
+            padding: 10,
+            flexDirection: "row",
+            width: "100%",
+            alignItems: "center",
+            justifyContent:
+              event_type === "event" ? "space-between" : "flex-end",
+            marginTop: 10,
+            paddingBottom: 30,
+          }}
+        >
+          {auth.logged && event_type === "event" && (
+            <>
+              {!isSchedule ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    addScheduleEvent(_id);
+                  }}
+                  style={{
+                    ...loginStyles.button,
+                    backgroundColor:
+                      auth.user?.user_type === "director de programa" ||
+                      auth.user?.user_type === "docente"
+                        ? Colors.Orange
+                        : Colors.Blue,
+                  }}
+                >
+                  <Text style={loginStyles.buttonText}>Agendar</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={() => {
+                    deleteScheduleEvent(_id);
+                  }}
+                  style={{
+                    ...loginStyles.button,
+                    backgroundColor:
+                      auth.user?.user_type === "director de programa" ||
+                      auth.user?.user_type === "docente"
+                        ? Colors.Orange
+                        : Colors.Blue,
+                  }}
+                >
+                  <Text style={loginStyles.buttonText}>Remover</Text>
+                </TouchableOpacity>
+              )}
+            </>
+          )}
+          {auth.logged && (
+            <>
+              {!event?.isFav ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    addFavoriteEvent(_id);
+                  }}
+                  style={{
+                    ...loginStyles.button,
+                    backgroundColor:
+                      auth.user?.user_type === "director de programa" ||
+                      auth.user?.user_type === "docente"
+                        ? Colors.Orange
+                        : Colors.Blue,
+                  }}
+                >
+                  <Text style={loginStyles.buttonText}>Favorito</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={() => {
+                    deleteFavoriteEvent(_id);
+                  }}
+                  style={{
+                    ...loginStyles.button,
+                    backgroundColor:
+                      auth.user?.user_type === "director de programa" ||
+                      auth.user?.user_type === "docente"
+                        ? Colors.Orange
+                        : Colors.Blue,
+                  }}
+                >
+                  <Text style={loginStyles.buttonText}>Remover</Text>
+                </TouchableOpacity>
+              )}
+            </>
+          )}
         </View>
       </ScrollView>
     </View>

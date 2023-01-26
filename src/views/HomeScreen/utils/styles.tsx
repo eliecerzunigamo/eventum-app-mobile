@@ -5,7 +5,7 @@ export const HomeStyles = StyleSheet.create({
   container: {
     width: "100%",
     height: "100%",
-    backgroundColor: Colors.Blue,
+    backgroundColor: Colors.Light,
   },
   header: {
     width: "100%",
@@ -45,11 +45,10 @@ export const HomeStyles = StyleSheet.create({
   scrollViewContainer: {
     width: "100%",
     height: "100%",
-    paddingTop: 20,
-    paddingBottom: 20,
   },
   eventsContainer: {
     width: "100%",
     alignItems: "center",
+    height: "100%",
   },
 });
