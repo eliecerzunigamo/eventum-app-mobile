@@ -19,8 +19,7 @@ import { useScheduleScreen } from "./hooks/useScheduleScreen";
 import { EventItem } from "./components/EventItem";
 
 export const ScheduleScreen = () => {
-  const { loading, error, getEvents, events, query } =
-    useScheduleScreen();
+  const { loading, error, getEvents, events, query } = useScheduleScreen();
 
   const [openFiltersModal, setOpenFiltersModal] = useState(false);
   const [facultyId, setFacultyId] = useState("default");

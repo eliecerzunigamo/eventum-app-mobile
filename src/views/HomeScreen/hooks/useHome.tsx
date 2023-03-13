@@ -30,7 +30,7 @@ export const useHome = () => {
     program_id?: string,
     reset?: boolean,
     query?: string,
-    event_type : string = "default"
+    event_type: string = "default"
   ) => {
     setLoading(true);
     const fac = faculty_id
@@ -44,7 +44,7 @@ export const useHome = () => {
         : ""
       : "";
     const event = event_type !== "default" ? `&event_type=${event_type}` : "";
-    
+
     try {
       if (reset) {
         const path = `events/all?page=1&size=${size}${fac}${prog}${event}&query=${query}`;

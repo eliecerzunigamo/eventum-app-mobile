@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Alert, BackHandler } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, BackHandler } from "react-native";
 import React, { useContext, useEffect } from "react";
 import { SidebarContext } from "../../context/sidebar/SidebarContext";
 import { SidebarTypes } from "../../context/sidebar/SideBarTypes";

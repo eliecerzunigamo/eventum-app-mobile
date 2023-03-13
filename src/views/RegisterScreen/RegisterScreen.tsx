@@ -8,6 +8,7 @@ import { useRegister } from "./hooks/useRegister";
 import { Loading } from "../../common/components/Loading/Loading";
 import { SuccessModal } from "./components/SuccessModal";
 import { ErrorModal } from "./components/ErrorModal";
+import Icon from "react-native-vector-icons/Entypo";
 
 export interface RegisterForm {
   name: string;
@@ -28,7 +29,7 @@ export default function RegisterScreen() {
     userType: "",
   });
   const [selectedUserType, setSelectedUserType] = useState<string>("");
-
+  const [hidePass, setHidePass] = useState<boolean>(true);
   const usersTypes = useMemo(
     () => [
       { label: "Estudiante", value: "estudiante" },
@@ -68,14 +69,44 @@ export default function RegisterScreen() {
           style={stylesLogin.input}
         />
         <Text style={styles.descriptionLabel}>Ingrese correo electrónico</Text>
-        <TextInput
-          onChange={(e) =>
-            setRegisterForm({ ...registerForm, password: e.nativeEvent.text })
-          }
-          placeholder="Contraseña"
-          style={stylesLogin.input}
-          secureTextEntry={true}
-        />
+        <View>
+          <TextInput
+            onChange={(e) =>
+              setRegisterForm({ ...registerForm, password: e.nativeEvent.text })
+            }
+            placeholder="Contraseña"
+            style={stylesLogin.input}
+            secureTextEntry={hidePass}
+          />
+          {hidePass ? (
+            <Icon
+              style={{
+                marginRight: 15,
+                position: "absolute",
+                right: 0,
+                top: 15,
+              }}
+              name="eye"
+              size={28}
+              color={Colors.Grey}
+              onPress={() => setHidePass(false)}
+            />
+          ) : (
+            <Icon
+              style={{
+                marginRight: 15,
+                position: "absolute",
+                right: 0,
+                top: 15,
+              }}
+              name="eye-with-line"
+              size={28}
+              color={Colors.Grey}
+              onPress={() => setHidePass(true)}
+            />
+          )}
+        </View>
+
         <Text style={styles.descriptionLabel}>Contraseña</Text>
         <TextInput
           onChange={(e) =>
@@ -86,6 +117,7 @@ export default function RegisterScreen() {
           style={stylesLogin.input}
           keyboardType="numeric"
         />
+
         <Text style={styles.descriptionLabel}>Ingrese su edad en numero</Text>
 
         <TextInput
@@ -116,10 +148,13 @@ export default function RegisterScreen() {
             </Text>
             {userType.value === selectedUserType ? (
               <TouchableOpacity
-                style={{...styles.noFillCheckBox, backgroundColor: Colors.Danger, borderColor: Colors.Danger}}
+                style={{
+                  ...styles.noFillCheckBox,
+                  backgroundColor: Colors.Danger,
+                  borderColor: Colors.Danger,
+                }}
                 onPress={() => setSelectedUserType(userType.value)}
-              >
-              </TouchableOpacity>
+              ></TouchableOpacity>
             ) : (
               <TouchableOpacity
                 style={styles.noFillCheckBox}

@@ -19,7 +19,7 @@ import EmptyMessage from "./components/EmptyMessage";
 import SearchBar from "../../common/components/SearchBar/SearchBar";
 import { EventItem } from "./components/EventItem";
 import { useFavoriteScreen } from "../FavoriteScreen/hooks/useFavoriteScreen";
-import { BackHandler } from 'react-native';
+import { BackHandler } from "react-native";
 
 const Home = () => {
   const { getEvents, setQuery, query, events } = useHome();

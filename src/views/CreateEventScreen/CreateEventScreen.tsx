@@ -26,6 +26,7 @@ import { ErrorModal } from "../RegisterScreen/components/ErrorModal";
 import Header from "../../common/components/Header/Header";
 import { SidebarContext } from "../../common/context/sidebar/SidebarContext";
 import { SidebarTypes } from "../../common/context/sidebar/SideBarTypes";
+import moment from "moment";
 
 export const CreateEventScreen = () => {
   const {
@@ -120,6 +121,13 @@ export const CreateEventScreen = () => {
     []
   );
 
+  const handleDateChange = (date: Date) => {
+    const time = date.getTime();
+    const adjust = 1000 * 60 * 60 * 5;
+    const newDate = new Date(time - adjust);
+    return newDate;
+  };
+
   const handleImage = () => {
     launchImageLibrary(
       { mediaType: "photo", includeBase64: true },
@@ -128,7 +136,7 @@ export const CreateEventScreen = () => {
         } else {
           setBase64(
             `data:${response.assets![0].type};base64,` +
-            response.assets![0].base64
+              response.assets![0].base64
           );
         }
       }
@@ -137,7 +145,6 @@ export const CreateEventScreen = () => {
 
   return (
     <>
-
       <Loading open={loading} />
       <View style={createEventScreen.container}>
         <Header
@@ -149,7 +156,11 @@ export const CreateEventScreen = () => {
           title="Crear evento"
           previousRoute="Home"
         />
-        <ErrorModal close={closeErrorModal} error={error} open={openErrorModal} />
+        <ErrorModal
+          close={closeErrorModal}
+          error={error}
+          open={openErrorModal}
+        />
         <ScrollView style={createEventScreen.scrollView}>
           <View style={createEventScreen.scrollViewContent}>
             <Text style={registerStyles.userTypeLabel}>Tipo:</Text>
@@ -170,7 +181,9 @@ export const CreateEventScreen = () => {
               placeholder="Titulo"
               style={styles.input}
             />
-            <Text style={registerStyles.descriptionLabel}>Ingrese un titulo</Text>
+            <Text style={registerStyles.descriptionLabel}>
+              Ingrese un titulo
+            </Text>
             <TextInput
               onChange={(e) => {
                 setEventDescription(e.nativeEvent.text);
@@ -193,22 +206,18 @@ export const CreateEventScreen = () => {
             {selectedEventType === "event" && (
               <>
                 <CustomDatePicker
-                  dateLabel={String(
-                    eventDate.toISOString().split("T")[0]
-                  ).replace(/-/g, "/")}
+                  dateLabel={moment(eventDate).format("YYYY/MM/DD")}
                   datePickerLabel={"Fecha inicio"}
                   selectedDate={eventDate}
                   setDate={setEventDate}
                   dateModalTitle={"Seleccione una fecha"}
                   optionValue="date"
                   selectedValue="date"
-                  setSelectedValue={() => { }}
+                  setSelectedValue={() => {}}
                   dateModalMode="date"
                 />
                 <CustomDatePicker
-                  dateLabel={String(
-                    eventEndDate.toISOString().split("T")[0]
-                  ).replace(/-/g, "/")}
+                  dateLabel={moment(eventEndDate).format("YYYY/MM/DD")}
                   datePickerLabel={"Fecha fin"}
                   selectedDate={eventEndDate}
                   setDate={setEventEndDate}
@@ -219,15 +228,7 @@ export const CreateEventScreen = () => {
                   setSelectedValue={setHaveEndDate}
                 />
                 <CustomDatePicker
-                  dateLabel={
-                    String(eventDate.toISOString().split("T")[1])
-                      .split(".")[0]
-                      .split(":")[0] +
-                    ":" +
-                    String(eventDate.toISOString().split("T")[1])
-                      .split(".")[0]
-                      .split(":")[1]
-                  }
+                  dateLabel={moment(eventDate).format("HH:mm")}
                   datePickerLabel={"Hora inicio"}
                   selectedDate={eventDate}
                   setDate={setEventDate}
@@ -235,18 +236,10 @@ export const CreateEventScreen = () => {
                   dateModalMode="time"
                   optionValue="date"
                   selectedValue="date"
-                  setSelectedValue={() => { }}
+                  setSelectedValue={() => {}}
                 />
                 <CustomDatePicker
-                  dateLabel={
-                    String(eventEndDate.toISOString().split("T")[1])
-                      .split(".")[0]
-                      .split(":")[0] +
-                    ":" +
-                    String(eventEndDate.toISOString().split("T")[1])
-                      .split(".")[0]
-                      .split(":")[1]
-                  }
+                  dateLabel={moment(eventEndDate).format("HH:mm")}
                   datePickerLabel={"Hora fin"}
                   selectedDate={eventEndDate}
                   setDate={setEventEndDate}
@@ -254,7 +247,7 @@ export const CreateEventScreen = () => {
                   dateModalMode="time"
                   selectedValue={haveEndDate}
                   optionValue="final_date"
-                  setSelectedValue={() => { }}
+                  setSelectedValue={() => {}}
                 />
                 <TextInput
                   onChange={(e) => {
@@ -332,6 +325,5 @@ export const CreateEventScreen = () => {
         </ScrollView>
       </View>
     </>
-
   );
 };
