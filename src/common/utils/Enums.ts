@@ -1,8 +1,9 @@
 export const Connections = {
-  Prod: "https://eventum-app-backend-production.up.railway.app/api/",
-  ProdImage: "http://10.0.2.2:4001/uploads/",
-  Local: "http://10.0.2.2:4001/api/",
-  LocalImage: "https://eventum-app-backend-production.up.railway.app/uploads/",
+  Prod: "https://eventum-app-backend.onrender.com/api/",
+  LocalImage: "https://eventum-app-backend.onrender.com/uploads/",
+
+  // https://eventum-app-backend.onrender.com
+  // http://10.0.2.2:4001
 };
 
 export enum Colors {
